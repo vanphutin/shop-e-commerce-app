@@ -19,22 +19,26 @@ const LoginPage = () => {
             <div className="form-title text-center">
               <h2>LOGIN</h2>
             </div>
-            <div data-mdb-input-init class="form-outline mb-4">
-              <label class="form-label" for="form2Example1">
+            <div data-mdb-input-init className="form-outline mb-4">
+              <label className="form-label" for="form2Example1">
                 Email address
               </label>
-              <input type="email" id="form2Example1" class="form-control" />
+              <input type="email" id="form2Example1" className="form-control" />
             </div>
 
-            <div data-mdb-input-init class="form-outline mb-4">
-              <label class="form-label" for="form2Example2">
+            <div data-mdb-input-init className="form-outline mb-4">
+              <label className="form-label" for="form2Example2">
                 Password
               </label>
-              <input type="password" id="form2Example2" class="form-control" />
+              <input
+                type="password"
+                id="form2Example2"
+                className="form-control"
+              />
             </div>
 
-            <div class="row mb-4">
-              <div class="col text-end">
+            <div className="row mb-4">
+              <div className="col text-end">
                 <Link to="/forgor-password">Forgot password?</Link>
               </div>
             </div>
@@ -43,12 +47,12 @@ const LoginPage = () => {
               type="button"
               data-mdb-button-init
               data-mdb-ripple-init
-              class="btn btn-primary btn-block mb-4 btn-login "
+              className="btn btn-primary btn-block mb-4 btn-login "
             >
               Sign in
             </button>
 
-            <div class="text-center">
+            <div className="text-center">
               <p>or sign up with:</p>
 
               {/* google */}
