@@ -1,62 +1,60 @@
+import "../assets/styles/pages/__header.scss";
 import React from "react";
 import { GiShop } from "react-icons/gi";
-import "../assets/styles/pages/__header.scss";
+import { Link } from "react-router-dom";
+import { TfiAlignJustify } from "react-icons/tfi";
+import { CiSearch } from "react-icons/ci";
 
 const HeaderPage = () => {
+  const handleShowMenu = () => {
+    const nav_menu = document.querySelectorAll(".show-phone");
+    nav_menu.forEach((item) => {
+      item.classList.toggle("show");
+    });
+  };
   return (
-    <header class="p-1 text-bg-dark">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a
-            href="/"
-            class="logo d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
-          >
-            <GiShop />
-          </a>
+    <header className="p-1 text-bg-light">
+      <nav className="container-fluid row  text-center">
+        <div className="nav-icon__logo col-lg-2 col-6 col-md-4">
+          <GiShop />
+        </div>
+        <div className="nav-icon__more d-md-none  col-6 text-end ">
+          <TfiAlignJustify onClick={handleShowMenu} />
+        </div>
 
-          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <div className="nav-menu d-none show-phone d-md-block col-xl-4 col-md-4">
+          <ul className="nav-menu__item">
             <li>
-              <a href="#" class="nav-link px-2 text-secondary">
-                Home
-              </a>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <a href="#" class="nav-link px-2 text-white">
-                Shop
-              </a>
+              <Link to="/shop">Shop</Link>
             </li>
             <li>
-              <a href="#" class="nav-link px-2 text-white">
-                Collections
-              </a>
+              <Link to="/collections">Collections</Link>
             </li>
-
             <li>
-              <a href="#" class="nav-link px-2 text-white">
-                About
-              </a>
+              <Link to="/about">About</Link>
             </li>
           </ul>
-
-          <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input
-              type="search"
-              class="form-control form-control-dark text-bg-dark"
-              placeholder="Search..."
-              aria-label="Search"
-            />
-          </form>
-
-          <div class="text-end">
-            <button type="button" class="btn btn-outline-light me-2">
-              Login
-            </button>
-            <button type="button" class="btn btn-warning">
-              Sign-up
-            </button>
-          </div>
         </div>
-      </div>
+        <div className="nav-search d-none  d-xl-block col-xl-3 ">
+          <form>
+            <input type="text" name="" id="" placeholder="Search ..." />
+            <span className="nav-search__icon-search">
+              <CiSearch />
+            </span>
+          </form>
+        </div>
+        <div className="nav-auth col-12 show-phone d-none d-md-block col-xl-3 col-md-4">
+          <button className="btn btn-info nav-auth__btn nav-auth__login">
+            Login
+          </button>
+          <button className="btn btn-dark nav-auth__btn nav-auth__sign-up">
+            Sign Up
+          </button>
+        </div>
+      </nav>
     </header>
   );
 };
