@@ -1,0 +1,90 @@
+@import "../utils/mixins";
+
+.login {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  position: relative;
+  .login-main {
+    display: flex;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    .login-banner {
+      width: 50%;
+      overflow: hidden;
+      border-radius: 10px;
+      .login-banner__img {
+        height: 90vh;
+        width: 200%;
+        object-fit: cover;
+        margin-left: -70%;
+      }
+    }
+  }
+
+  .login-form {
+    overflow: hidden;
+    position: relative;
+    @include flex-center;
+    form {
+      width: 60%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .form-title {
+        h2 {
+          font-weight: 700;
+          text-align: center;
+        }
+      }
+      .text-end {
+        a {
+          text-decoration: none;
+          font-weight: 600;
+          color: #e5a63f;
+        }
+      }
+      button.btn-login {
+        width: 100%;
+        background-color: #ff7a7b;
+        border: none;
+      }
+      .text-center {
+        .form__nagivate {
+          font-weight: 500;
+        }
+        a.form-logo {
+          display: inline-block;
+          width: 40px;
+
+          img {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 50%;
+          }
+        }
+      }
+      .text-end {
+        a {
+          color: #000;
+        }
+      }
+    }
+  }
+  @media (max-width: 992px) {
+    .login-banner {
+      display: none;
+    }
+    .login-form {
+      position: static;
+    }
+  }
+}
