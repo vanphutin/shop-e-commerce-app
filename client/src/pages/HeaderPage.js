@@ -47,12 +47,17 @@ const HeaderPage = () => {
           </form>
         </div>
         <div className="nav-auth col-12 show-phone d-none d-md-block col-xl-3 col-md-4">
-          <button className="btn btn-info nav-auth__btn nav-auth__login">
-            Login
-          </button>
-          <button className="btn btn-dark nav-auth__btn nav-auth__sign-up">
-            Sign Up
-          </button>
+          <Link to="/login">
+            {" "}
+            <button className="btn btn-info nav-auth__btn nav-auth__login">
+              Login
+            </button>
+          </Link>
+          <Link to="/sign-up">
+            <button className="btn btn-dark nav-auth__btn nav-auth__sign-up">
+              Sign Up
+            </button>
+          </Link>
         </div>
       </nav>
     </header>
