@@ -1,0 +1,111 @@
+@import "../../../../styles/utils/variables";
+.deal-cart {
+  overflow: hidden;
+  // height: 350px;
+  height: 380px;
+  border: 1px solid #ccc;
+
+  .deal-cart__header {
+    width: 100%;
+    padding: 15px 0px 15px 15px;
+    border-bottom: 1px solid #dededeb4;
+    margin-left: 0;
+
+    .header-pagination {
+      text-align: end;
+
+      .header-pagination__prev,
+      .header-pagination__next {
+        cursor: pointer;
+        padding: 7px;
+        color: #000;
+        background-color: #dddddd;
+        margin-left: 10px;
+      }
+    }
+  }
+  .deal-cart__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .header-title {
+      font-weight: 500;
+      font-size: $font-size-title;
+    }
+    .deal-cart__image {
+      width: 250px;
+      padding: 30px 0;
+
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .deal-cart__detal {
+      padding: 30px 0;
+      font-family: "Poppins", sans-serif;
+      .deal-cart__detal-name {
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+      }
+
+      .deal-cart__detail-price {
+        margin-bottom: 15px;
+        .detail-price__old {
+          text-decoration: line-through;
+          font-size: 15px;
+          color: #ccc;
+          font-style: italic;
+        }
+        .detail-price__new {
+          font-size: 1.3rem;
+          color: #000000;
+          font-weight: 500;
+        }
+      }
+      .deal-cart__detail-descript {
+        font-size: 16px;
+        color: #737373;
+        margin-bottom: 15px;
+        height: 48px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; // Số dòng giới hạn
+        -webkit-box-orient: vertical;
+      }
+
+      .deal-cart__detal-action {
+        margin-bottom: 15px;
+        .detal-action__favourite,
+        .detal-action__view {
+          border: none;
+          margin-left: 15px;
+          padding: 7px 15px;
+          border-radius: 8px;
+        }
+      }
+
+      .deal-cart__detail-time {
+        display: flex;
+        align-items: center;
+        .detail-time {
+          margin-right: 20px;
+          p {
+            margin: 0;
+          }
+          .time {
+            text-align: center;
+            font-weight: 600;
+          }
+
+          .title {
+            font-size: 0.9em;
+            color: #737373;
+          }
+        }
+      }
+    }
+  }
+}
