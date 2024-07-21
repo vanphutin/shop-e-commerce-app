@@ -4,7 +4,7 @@ const query = promisify(db.query).bind(db);
 var md5 = require("md5");
 
 const Auth = {
-  //checking username existence
+  // Checking username existence
   checkUsernameExists: async (username) => {
     const sql_check_username =
       "SELECT COUNT(*) AS count FROM users WHERE UserName = ?";
@@ -18,19 +18,20 @@ const Auth = {
     }
   },
 
-  //   checking email existence
+  // Checking email existence
   checkUseremailExists: async (useremail) => {
     const sql_check_useremail =
       "SELECT COUNT(*) AS count FROM users WHERE UserEmail = ?";
     try {
       const [rows] = await query(sql_check_useremail, [useremail]);
-      console.log("[rows]", rows.count);
       return rows.count > 0;
     } catch (error) {
-      console.log("Error checking username existence:", error);
+      console.log("Error checking email existence:", error);
       throw error;
     }
   },
+
+  // Register user
   authRegister: async (
     UserID,
     UserEmail,
@@ -46,7 +47,7 @@ const Auth = {
     authToken
   ) => {
     const sql_register =
-      "INSERT INTO users (UserID, UserEmail,UserName,UserPassword,UserFirstName,UserLastName,UserCity,UserCountry,Gender,Birthday,Role,authToken) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+      "INSERT INTO users (UserID, UserEmail, UserName, UserPassword, UserFirstName, UserLastName, UserCity, UserCountry, Gender, Birthday, Role, authToken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     try {
       const result = await query(sql_register, [
         UserID,
@@ -64,7 +65,7 @@ const Auth = {
       ]);
       return result;
     } catch (error) {
-      console.log("Lỗi khi thực hiện truy vấn:", error);
+      console.log("Error executing query:", error);
       throw error;
     }
   },

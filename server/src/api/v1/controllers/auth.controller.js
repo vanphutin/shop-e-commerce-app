@@ -40,14 +40,14 @@ module.exports.authRegister = async (req, res) => {
 
     res.status(201).json({
       code: 201,
-      message: "Đăng ký người dùng thành công",
+      message: "User registration successful",
       authToken,
     });
   } catch (error) {
-    console.error("Lỗi khi xử lý quên mật khẩu:", error);
+    console.error("Error processing registration:", error);
     res.status(500).json({
       success: false,
-      message: "Lỗi máy chủ nội bộ",
+      message: "Internal server error",
     });
   }
 };
