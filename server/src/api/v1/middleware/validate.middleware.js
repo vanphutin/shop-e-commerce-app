@@ -57,4 +57,24 @@ const validateRegister = async (req, res, next) => {
   }
   next();
 };
-module.exports = validateRegister;
+
+const validateLogin = async (req, res, next) => {
+  const { UserEmail, UserPassword } = req.body;
+  if (!UserEmail || !UserPassword === "") {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const check_email_pass = await Auth.authCheckEmailPass(
+    UserEmail,
+    UserPassword
+  );
+  // console.log("check_email_pass", check_email_pass);
+  if (check_email_pass) {
+    return res.status(400).json({ error: "UserEmail already exists" });
+  }
+  next();
+};
+
+module.exports = {
+  validateRegister,
+  validateLogin,
+};
