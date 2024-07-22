@@ -6,6 +6,10 @@ const apiRoutersV1 = require("./api/v1/routers/index.router");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+//cookie parser
+app.use(cookieParser());
 
 // CORS
 app.use(
@@ -38,7 +42,11 @@ database.getConnection((error, connection) => {
     console.error("Error connecting to database ", error);
     return;
   }
-  console.log("Connected to MySQL database");
+  console.log(
+    "Connected to MySQL database",
+
+    `host : ${database.config.connectionConfig.host} || port: ${database.config.connectionConfig.port}`
+  );
   connection.release();
   app.listen(port, () => {
     console.log(`app listening on port ${port}`);

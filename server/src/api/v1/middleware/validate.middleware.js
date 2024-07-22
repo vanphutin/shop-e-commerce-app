@@ -10,6 +10,7 @@ const validateRegister = async (req, res, next) => {
     UserCountry,
     Gender,
     Birthday,
+    UserAvatar,
     Role,
   } = req.body;
   if (
@@ -55,21 +56,23 @@ const validateRegister = async (req, res, next) => {
   if (!Role || Role.trim() === "") {
     req.body.Role = "user";
   }
+  if (!UserAvatar || UserAvatar.trim() === "") {
+    req.body.UserAvatar = "no image";
+  }
   next();
 };
 
 const validateLogin = async (req, res, next) => {
   const { UserEmail, UserPassword } = req.body;
-  if (!UserEmail || !UserPassword === "") {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
   const check_email_pass = await Auth.authCheckEmailPass(
     UserEmail,
     UserPassword
   );
   // console.log("check_email_pass", check_email_pass);
   if (check_email_pass) {
-    return res.status(400).json({ error: "UserEmail already exists" });
+    return res
+      .status(400)
+      .json({ error: "UserEmail  or UserPassword already exists" });
   }
   next();
 };

@@ -8,5 +8,6 @@ const {
 
 router.post("/register", validateRegister, authController.authRegister);
 router.post("/login", validateLogin, authController.authLogin);
+router.post("/verifyToken", authController.authVeryToken);
 
 module.exports = router;

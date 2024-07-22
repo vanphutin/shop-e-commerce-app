@@ -18,6 +18,7 @@ module.exports.authRegister = async (req, res) => {
       UserCountry,
       Gender,
       Birthday,
+      UserAvatar,
       Role,
     } = req.body;
 
@@ -38,6 +39,7 @@ module.exports.authRegister = async (req, res) => {
       Gender,
       Birthday,
       Role,
+      UserAvatar,
       authToken
     );
 
@@ -87,6 +89,7 @@ module.exports.authLogin = async (req, res) => {
       message: "Login successful",
 
       data: {
+        UserID: loginAuth.UserID,
         username: loginAuth.UserName,
         lastname: loginAuth.UserLastName,
         firstname: loginAuth.UserFirstName,
@@ -109,5 +112,63 @@ module.exports.authLogin = async (req, res) => {
       success: false,
       message: "Internal server error",
     });
+  }
+};
+
+module.exports.authVeryToken = async (req, res) => {
+  try {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    const secretKey = "vanphutin-2004-29-02";
+    jwt.verify(token, secretKey, async (err, decoded) => {
+      if (err) {
+        return res
+          .status(401)
+          .json({ message: "Failed to authenticate token" });
+      }
+
+      // console.log("decoded.userId:", decoded);
+      // Giả sử bạn có hàm này để lấy thông tin người dùng từ ID
+      const loginAuth = await Auth.authVeryToken(decoded?.UserEmail);
+      // console.log("user:", loginAuth);
+
+      if (!loginAuth) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json({
+        code: 200,
+        message: "Login successful",
+
+        user: {
+          username: loginAuth.UserName,
+          lastname: loginAuth.UserLastName,
+          firstname: loginAuth.UserFirstName,
+          useremail: loginAuth.UserEmail,
+          address: {
+            city: loginAuth.UserCity,
+            country: loginAuth.UserCountry,
+          },
+          gender: loginAuth.Gender,
+          birthday: loginAuth.Birthday,
+          role: loginAuth.Role,
+          delete: loginAuth.Deleted,
+          createAt: loginAuth.createAt,
+          avatar: loginAuth.UserAvatar,
+        },
+        token: loginAuth.authToken,
+      });
+    });
+  } catch (error) {
+    console.error("Error in authVeryToken:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
