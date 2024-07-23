@@ -87,13 +87,13 @@ module.exports.authLogin = async (req, res) => {
     res.status(200).json({
       code: 200,
       message: "Login successful",
-
       data: {
-        UserID: loginAuth.UserID,
+        id: loginAuth.UserID,
         username: loginAuth.UserName,
         lastname: loginAuth.UserLastName,
         firstname: loginAuth.UserFirstName,
         useremail: loginAuth.UserEmail,
+        avatar: loginAuth.UserAvatar,
         address: {
           city: loginAuth.UserCity,
           country: loginAuth.UserCountry,
@@ -149,6 +149,7 @@ module.exports.authVeryToken = async (req, res) => {
         message: "Login successful",
 
         user: {
+          id: loginAuth.UserID,
           username: loginAuth.UserName,
           lastname: loginAuth.UserLastName,
           firstname: loginAuth.UserFirstName,

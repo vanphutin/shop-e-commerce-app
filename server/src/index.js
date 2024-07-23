@@ -26,10 +26,6 @@ app.get("/", (req, res) => {
 //parse application
 app.use(bodyParser.json());
 
-// Middleware để parse form-data
-const upload = multer(); // multer không cần cấu hình đặc biệt nếu chỉ dùng để parse form-data
-app.use(upload.none()); // parse form-data không có file upload
-
 // parse application/x-www-form-urlencoded
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

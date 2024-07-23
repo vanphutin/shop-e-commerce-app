@@ -44,10 +44,11 @@ const Auth = {
     Gender,
     Birthday,
     Role,
+    UserAvatar,
     authToken
   ) => {
     const sql_register =
-      "INSERT INTO users (UserID, UserEmail, UserName, UserPassword, UserFirstName, UserLastName, UserCity, UserCountry, Gender, Birthday, Role, authToken) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO users (UserID, UserEmail, UserName, UserPassword, UserFirstName, UserLastName, UserCity, UserCountry, Gender, Birthday, Role,UserAvatar, authToken) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     try {
       const result = await query(sql_register, [
         UserID,
@@ -61,6 +62,7 @@ const Auth = {
         Gender,
         Birthday,
         Role,
+        UserAvatar,
         authToken,
       ]);
       return result;
@@ -95,6 +97,16 @@ const Auth = {
     } catch (error) {
       console.log("Lỗi khi thực hiện truy vấn:", error);
       throw error; // Ném lỗi để controller hoặc route bắt được và xử lý
+    }
+  },
+  authVeryToken: async (UserEmail) => {
+    const sql_veryToken = "SELECT * FROM users WHERE UserEmail = ?";
+    try {
+      const result = await query(sql_veryToken, [UserEmail]);
+      return result && result.length > 0 ? result[0] : null;
+    } catch (error) {
+      console.log("Lỗi khi thực hiện truy vấn:", error);
+      throw error;
     }
   },
   //END LOGIN
