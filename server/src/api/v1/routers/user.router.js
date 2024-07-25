@@ -4,8 +4,8 @@ const multer = require("multer");
 // const upload = multer({ dest: "./uploads/" });
 
 const userController = require("../controllers/user.controller");
-const upload = require("../middleware/upload");
+const uploadUser = require("../middleware/uploadUser");
 
-router.patch("/register-seller", upload, userController.registerSeller);
+router.patch("/register-seller", uploadUser, userController.registerSeller);
 
 module.exports = router;
