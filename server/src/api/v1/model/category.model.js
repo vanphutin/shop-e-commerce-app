@@ -1,4 +1,5 @@
 // model/category.model.js
+const { log } = require("console");
 const db = require("../../../config/database.config");
 const { promisify } = require("util");
 const query = promisify(db.query).bind(db);
@@ -14,6 +15,17 @@ const Categories = {
       throw error;
     }
   },
+  checkCategoryName: async (CategoryName) => {
+    const sql_check = "SELECT * FROM productcategories WHERE CategoryName = ?";
+    try {
+      const result = await query(sql_check, [CategoryName]);
+      return result.length > 0;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
+
   createCategory: async (CategoryID, CategoryName) => {
     const sql_create =
       "INSERT INTO productcategories (CategoryID, CategoryName) VALUES (?,?)";
