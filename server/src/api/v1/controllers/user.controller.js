@@ -1,5 +1,6 @@
 const User = require("../model/user.model");
 const fs = require("fs");
+const { v4: uuidv4 } = require("uuid");
 
 module.exports.registerSeller = async (req, res) => {
   try {
@@ -49,6 +50,28 @@ module.exports.registerSeller = async (req, res) => {
       code: 200,
       message: "Update user seller successful",
     });
+  } catch (error) {
+    console.log("Error executing query:", error);
+    res.status(500).json({
+      code: 500,
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports.createProducts = async (req, res) => {
+  const ProductID = uuidv4();
+  try {
+    const {
+      ProductName,
+      ProductPrice,
+      ProductWeight,
+      ProductLongDesc,
+      ProductImage,
+      ProductCategoryID,
+      ProductStock,
+      UserID,
+    } = req.body;
   } catch (error) {
     console.log("Error executing query:", error);
     res.status(500).json({
