@@ -3,15 +3,22 @@ const { promisify } = require("util");
 const query = promisify(db.query).bind(db);
 
 const Products = {
-  getAllProducts: async (userId) => {
-    const sql_product = `
+  getAllProducts: async (sort) => {
+    let sql_product = `
       SELECT p.*, c.CategoryName
       FROM products p
       JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
-      WHERE p.UserID = ?
+      
     `;
+    if (sort === "asc") {
+      sql_product += "ORDER BY ProductPrice ASC";
+    } else if (sort === "desc") {
+      sql_product += "ORDER BY ProductPrice DESC";
+    } else {
+      sql_product += "";
+    }
     try {
-      const result = await query(sql_product, [userId]);
+      const result = await query(sql_product);
       return result;
     } catch (error) {
       console.error("Error executing query:", error);
