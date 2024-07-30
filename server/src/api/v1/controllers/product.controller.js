@@ -4,14 +4,14 @@ const fs = require("fs");
 
 module.exports.getAllProducts = async (req, res) => {
   const sort = req.query.sort;
+  const page = req.query.page;
   const categoriesQuery = req.query.categories;
   // Kiểm tra nếu categoriesQuery là chuỗi
   const categories =
     typeof categoriesQuery === "string" ? categoriesQuery.split(",") : [];
 
   try {
-    const allProducts = await Products.getAllProducts(sort, categories);
-    console.log("allProducts", allProducts);
+    const allProducts = await Products.getAllProducts(sort, categories, page);
 
     if (allProducts.length === 0) {
       return res.json({

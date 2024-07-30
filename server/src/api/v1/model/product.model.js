@@ -3,7 +3,8 @@ const { promisify } = require("util");
 const query = promisify(db.query).bind(db);
 
 const Products = {
-  getAllProducts: async (sort, categories) => {
+  getAllProducts: async (sort, categories, page) => {
+    const PAGE_SIZE = 8;
     let sql_product = `
       SELECT p.*, c.CategoryName
       FROM products p
@@ -13,7 +14,7 @@ const Products = {
     // Handle Category filtering
     if (categories.length > 0) {
       sql_product += ` WHERE c.CategoryName IN (${categories
-        .map((category) => `'${category}'`)
+        .map(() => "?")
         .join(",")})`;
     }
 
@@ -24,8 +25,20 @@ const Products = {
       sql_product += ` ORDER BY p.ProductPrice DESC`;
     }
 
+    // Handle pagination
+    let params = categories; // Initialize params with categories
+    if (page) {
+      page = parseInt(page); // Convert from string to int
+      let skipPage = (page - 1) * PAGE_SIZE;
+      sql_product += ` LIMIT ? OFFSET ?`;
+      params = [...params, PAGE_SIZE, skipPage];
+    } else {
+      sql_product += ` LIMIT ?`; // Default limit if no page is provided
+      params = [...params, PAGE_SIZE];
+    }
+
     try {
-      const result = await query(sql_product); // Remove `[categories]` if not needed
+      const result = await query(sql_product, params);
       return result;
     } catch (error) {
       console.error("Error executing query:", error);
