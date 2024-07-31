@@ -33,8 +33,7 @@ const Products = {
       sql_product += ` LIMIT ? OFFSET ?`;
       params = [...params, PAGE_SIZE, skipPage];
     } else {
-      sql_product += ` LIMIT ?`; // Default limit if no page is provided
-      params = [...params, PAGE_SIZE];
+      sql_product;
     }
 
     try {
@@ -82,6 +81,20 @@ const Products = {
         UserID,
       ]);
       return result;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
+  getDetailProducts: async (id) => {
+    const sql_detail = `
+      SELECT p.*, u.userCity, u.UserName 
+      FROM products p 
+      JOIN users u ON p.UserID = u.UserID 
+      WHERE ProductID = ?`;
+    try {
+      const result = await query(sql_detail, [id]);
+      return result[0];
     } catch (error) {
       console.error("Error executing query:", error);
       throw error;
