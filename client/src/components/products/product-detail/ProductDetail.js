@@ -1,18 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getDetailProduct } from "../../../services/apiServerviceProduct";
 import { toast } from "react-toastify";
 import { CiShop } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import "../../../assets/styles/components/products/product-detail/__ProductDetail.scss";
+import { AuthContext } from "../../../context/AuthProvider";
+import { getDetailCategories } from "../../../services/apiServerviceCategorie";
+import { postAddCart } from "../../../services/apiServerviceCart";
 
 const ProductDetail = () => {
+  const { user } = useContext(AuthContext);
+  const nagigate = useNavigate();
+  const SIZE_LIST = ["xs", "s", "m", "l", "xl", "xxl", "xxxl"];
+  const TOKEN = localStorage.getItem("token");
+  const VAT = 0.1;
+  const [size, setSize] = useState("null");
   const { id } = useParams();
   const [product, setProduct] = useState([]);
+  const [quantity, setQuantily] = useState(1);
+  const [category, setCategory] = useState("");
+  const [notes, setNotes] = useState("null");
+
+  //Call APIs
   useEffect(() => {
     fetchProductDetail(id);
-  }, []);
+    if (product?.ProductCategoryID) {
+      fetchCategory(product.ProductCategoryID);
+    }
+  }, [product?.ProductCategoryID]);
 
+  // API get detail product
   const fetchProductDetail = async (id) => {
     const res = await getDetailProduct(id);
     res.data === 200
@@ -20,11 +38,61 @@ const ProductDetail = () => {
       : setProduct(res.data);
   };
 
+  // API convert categoryID to categoryName
+  const fetchCategory = async (ProductCategoryID) => {
+    const res = await getDetailCategories(ProductCategoryID);
+    if (res.code === 404) {
+      return toast.error("error ");
+    }
+    setCategory(res.data);
+  };
+  //Count quantity
+  const handleQuantily = (e) => {
+    const action = e.target.getAttribute("name");
+    if (action === "INCREMENT") {
+      setQuantily((count) => count + 1);
+    } else if (action === "DERCMENT") {
+      quantity === 1 ? setQuantily(1) : setQuantily((count) => count - 1);
+    }
+  };
+
+  //Set size
+  const handleSetSize = (item, index) => {
+    const element = document.querySelectorAll(".item");
+    element.forEach((e) => e.classList.remove("active"));
+    element[index].classList.add("active");
+    setSize(item);
+  };
+
+  // Function to calculate total price
+  const totalPrice = () => {
+    return (product.ProductPrice * quantity).toFixed(3);
+  };
+
+  // Function to calculate subtotal including VAT
+  const subTotal = () => {
+    const total = parseFloat(totalPrice());
+    return (total + total * VAT).toFixed(3);
+  };
+
+  //handle submit form
+  const FetchAddToCart = async () => {
+    try {
+      if (user && TOKEN) {
+        const res = await postAddCart(user?.id, id, quantity, size, notes);
+        return toast.success("add product successfully");
+      }
+      toast.error("You are not logged in !");
+      nagigate("/login");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   return (
     <div className="detail-page container-fluid">
       {product ? (
         <div className="detail-page-main row">
-          <div className="detail-page-main main-address col-lg-4">
+          <div className="detail-page-main main-address  col-12 col-sm-12 col-lg-6 col-xl-4">
             <div className="main-address__image">
               <img
                 src={`data:image/jpeg;base64,${product.ProductImage} `}
@@ -38,7 +106,7 @@ const ProductDetail = () => {
                   <CiShop size="1.5rem" />
                   <Link to="#"> {product.UserName}</Link>
                 </span>
-                <button type="button" class="btn btn-outline-info">
+                <button type="button" className="btn btn-outline-info">
                   Visit Store
                 </button>
               </div>
@@ -50,10 +118,10 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-          <div className="detail-page-main main-info col-lg-4 ">
+          <div className="detail-page-main main-info  col-12 col-sm-12 col-lg-6 col-xl-4 ">
             <div className="main-info__category">
               {" "}
-              {product.ProductCategoryID}
+              {category || product.ProductCategoryID}
             </div>
             <div className="main-info__name">
               <h1>{product.ProductName}</h1>{" "}
@@ -68,59 +136,94 @@ const ProductDetail = () => {
             </div>
 
             <div className="main-info__price">
-              <h6>$</h6> {product.ProductPrice}
+              <h6>$</h6>
+              {product.ProductPrice} <span>,000</span>
             </div>
             <div className="main-info__size">
               <h6>Select Size</h6>
-              <div className="main-info__size item">xs</div>
-              <div className="main-info__size item">s</div>
-              <div className="main-info__size item">m</div>
-              <div className="main-info__size item">l</div>
-              <div className="main-info__size item">xl</div>
-              <div className="main-info__size item">xl</div>
-              <div className="main-info__size item">xxl</div>
-              <div className="main-info__size item">xxxl</div>
+              <ul className="main-info__size-list">
+                {SIZE_LIST.map((item, index) => (
+                  <li
+                    className="main-info__size item"
+                    key={index}
+                    onClick={(e) => handleSetSize(item, index)}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="main-info__description">
               <h6 className="mb-2">Description</h6>{" "}
               <p>{product.ProductLongDesc}</p>
             </div>
           </div>
-          <div className="detail-page-main main-order col-lg-4">
+          <div className="detail-page-main main-order col-12 col-sm-12 col-lg-12 col-xl-4">
             <div className="main-order-body">
               <h5 className="main-order-title">Order Details</h5>
-              <div className="main-order__quantily">
+              <div className="main-order__quantily   d-flex justify-content-between align-items-center  ">
                 <h6>Quantily</h6>
-                <span className="main-order__quantily control decrease">-</span>
-                <span className="main-order__quantily count">0</span>
-                <span className="main-order__quantily control increase">+</span>
+                <div className="main-order__quantily item-control">
+                  <span
+                    className="main-order__quantily control decrease"
+                    name="DERCMENT"
+                    datatype="44"
+                    onClick={handleQuantily}
+                  >
+                    -
+                  </span>
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    value={quantity}
+                    readOnly
+                    className="main-order__quantily count"
+                  />
+                  <span
+                    className="main-order__quantily control increase"
+                    name="INCREMENT"
+                    onClick={handleQuantily}
+                  >
+                    +
+                  </span>
+                </div>
               </div>
-              <div className="main-order__size">
+              <div className="main-order__size   d-flex justify-content-between align-items-center ">
                 <h6>Size</h6>
-                <span>M</span>
+                <span className="text-title">{size ? size : "_NaN"}</span>
               </div>
-              <div className="main-order__price">
+              <div className="main-order__price  d-flex justify-content-between align-items-center ">
                 <h6>Price</h6>
-                <span>$999,999</span>
+                <span className="text-title">${totalPrice()}</span>
               </div>
-              <div className="main-order__vat">
+              <div className="main-order__vat  d-flex justify-content-between align-items-center ">
                 <h6>VAT</h6>
-                <span>10%</span>
+                <span className="text-title">10%</span>
               </div>
               <div className="main-order__notes">
                 <h6>Notes</h6>
-                <textarea name="" id=""></textarea>
+                <textarea
+                  name=""
+                  id=""
+                  placeholder="Send to seller ..."
+                  onChange={(e) => setNotes(e.target.value)}
+                ></textarea>
               </div>
-              <div className="main-order__sub-total">
-                <h6>Sub Total</h6> <span>$1.424.890</span>
+              <div className="main-order__sub-total d-flex justify-content-between align-items-center ">
+                <h6>Sub Total</h6>{" "}
+                <span className="text-title">${subTotal()}</span>
               </div>
-              <div class="d-grid gap-2 main-order__button">
-                <buttob className="main-order__buy-now btn btn-primary">
+              <div className="d-grid gap-2 main-order__button">
+                <button className="main-order__buy-now btn btn-primary">
                   Buy Now
-                </buttob>
-                <buttob className="main-order__add-cart btn btn-outline-primary">
+                </button>
+                <button
+                  className="main-order__add-cart btn btn-outline-primary"
+                  onClick={FetchAddToCart}
+                >
                   Add to cart
-                </buttob>
+                </button>
               </div>
             </div>
           </div>
