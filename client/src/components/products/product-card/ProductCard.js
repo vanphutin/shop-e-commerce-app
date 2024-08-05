@@ -1,25 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
 import "../../../assets/styles/components/product-card/__ProductCard.scss";
+import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../../context/AuthProvider";
+import { postAddCart } from "../../../services/apiServerviceCart";
 
-const ProductCart = ({
+const ProductCard = ({
   productCart,
   addIcon: AddIcon,
   favoriteIcon: FavoriteIcon,
   viewIcon: ViewIcon,
-  mainClass,
-  imageClass,
-  detailClass,
+  mainclassName,
+  imageclassName,
+  detailclassName,
   showDate,
   showButton,
+  Linkto,
+  endDate, // Added endDate prop
 }) => {
-  const { image, name, oldPrice, newPrice, descript } = productCart;
+  const {
+    ProductID,
+    ProductImage,
+    ProductName,
+    oldPrice,
+    ProductPrice,
+    ProductLongDesc,
+  } = productCart;
+  const { user } = useContext(AuthContext);
+  const TOKEN = localStorage.getItem("token");
+  const [size, setSize] = useState("null");
+  const { id } = useParams();
+  const [quantity, setQuantily] = useState(1);
+  const [category, setCategory] = useState("");
+  const [notes, setNotes] = useState("null");
+  const nagigate = useNavigate();
+
   const calculateTimeLeft = () => {
-    //fake days
-    const getDays = new Date().getDate() + 1;
-    let difference = +new Date(`2024-07-${getDays}T00:00:00`) - +new Date();
+    let difference = +new Date(endDate) - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -42,31 +63,67 @@ const ProductCart = ({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [endDate]);
+
+  //fetch api add cart
+  const FetchAddToCart = async (id) => {
+    console.log("products", id);
+
+    try {
+      if (user && TOKEN) {
+        const res = await postAddCart(user?.id, id, quantity, size, notes);
+        console.log("res", res);
+
+        return toast.success("Add product successfully");
+      }
+      toast.error("You are not logged in !");
+      nagigate("/login");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div className="card">
-      <div className={`card-product ${mainClass}`}>
-        <div className={`card-product__image ${imageClass}`}>
-          <img src={image} alt={name} className="image-product" />
+      <div className={`card-product ${mainclassName}`}>
+        <div className={`card-product__image ${imageclassName}`}>
+          <Link to={`${Linkto}/${ProductID}`}>
+            <img
+              src={`data:image/gif;base64,${ProductImage}`}
+              alt={ProductName}
+              className="image-product"
+            />
+          </Link>
         </div>
-        <div className={`card-product__main ${detailClass}`}>
+        <div className={`card-product__main ${detailclassName}`}>
           <div className="card-product__detail">
-            <div className="detail-name">{name}</div>
+            <div className="detail-name">
+              <Link to={`${Linkto}/${ProductID}`}>{ProductName}</Link>
+            </div>
             <div className="detail-price">
               <div className="price-old">{oldPrice ? `$ ${oldPrice}` : ""}</div>
-              <div className="price-new">${newPrice}</div>
+              <div className="price-new">${ProductPrice}</div>
             </div>
-            <p className="detail-descript">{descript ? `${descript}` : ""}</p>
+
+            <p className="detail-descript">
+              {ProductLongDesc ? `${ProductLongDesc}` : ""}
+            </p>
+
             {showButton && (
               <div className="detail-action">
-                <button className="action-add-card btn btn-primary">
+                <button
+                  className="action-add-card btn btn-primary"
+                  onClick={() => FetchAddToCart(ProductID)}
+                >
                   {AddIcon ? <AddIcon /> : "Add To Cart"}
                 </button>
                 <button className="action-favourite">
-                  {FavoriteIcon ? <FavoriteIcon /> : <FaRegHeart />}
+                  {FavoriteIcon ? <FavoriteIcon /> : <FaHeart />}
                 </button>
                 <button className="action-view">
-                  {ViewIcon ? <ViewIcon /> : <IoEyeOutline />}
+                  <Link to={`${Linkto}/${ProductID}`}>
+                    {ViewIcon ? <ViewIcon /> : <IoEyeOutline />}
+                  </Link>
                 </button>
               </div>
             )}
@@ -97,13 +154,14 @@ const ProductCart = ({
   );
 };
 
-ProductCart.propTypes = {
+ProductCard.propTypes = {
   productCart: PropTypes.shape({
-    image: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    oldPrice: PropTypes.number.isRequired,
-    newPrice: PropTypes.number.isRequired,
-    descript: PropTypes.string.isRequired,
+    ProductID: PropTypes.string.isRequired,
+    ProductImage: PropTypes.string.isRequired,
+    ProductName: PropTypes.string.isRequired,
+    oldPrice: PropTypes.number,
+    ProductPrice: PropTypes.number.isRequired,
+    ProductLongDesc: PropTypes.string,
   }).isRequired,
   addIcon: PropTypes.elementType,
   favoriteIcon: PropTypes.elementType,
@@ -111,14 +169,10 @@ ProductCart.propTypes = {
   mainClass: PropTypes.string,
   imageClass: PropTypes.string,
   detailClass: PropTypes.string,
+  Linkto: PropTypes.string,
   showDate: PropTypes.bool,
+  showButton: PropTypes.bool,
+  endDate: PropTypes.string, // Added prop type for endDate
 };
 
-ProductCart.defaultProps = {
-  mainClass: "",
-  imageClass: "",
-  detailClass: "",
-  showDate: false,
-};
-
-export default ProductCart;
+export default ProductCard;
