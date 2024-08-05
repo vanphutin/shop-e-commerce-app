@@ -1,38 +1,61 @@
 // Cart.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../assets/styles/components/products/product-cart/__cart.scss";
+import { TbLock } from "react-icons/tb";
+import { useLocation } from "react-router-dom";
+import {
+  deleteCartItem,
+  getCartItems,
+} from "../../../services/apiServerviceCart";
+import { toast } from "react-toastify";
 
 const ProductCart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      price: 29.99,
-      quantity: 1,
-      image: "https://via.placeholder.com/100",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: 49.99,
-      quantity: 2,
-      image: "https://via.placeholder.com/100",
-    },
-  ]);
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  const [cartItems, setCartItems] = useState([]);
+  const location = useLocation();
+  const { id } = location.state || {};
+
+  useEffect(() => {
+    fetchCartItems(id);
+  }, []);
+
+  const fetchCartItems = async (id) => {
+    try {
+      const res = await getCartItems(id);
+      if (res.code !== 200) {
+        return toast.error("Error server !");
+      }
+      setCartItems(res.data);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
-  const handleUpdateQuantity = (id, quantity) => {
+  const handleRemoveItem = async (idCartItem) => {
+    const res = await deleteCartItem(idCartItem);
+    if (res.code !== 200) {
+      return toast.error("error server");
+    }
+
+    setCartItems(cartItems.filter((item) => item.idCartItem !== idCartItem));
+    toast.success("Delete successfully !");
+  };
+
+  const handleUpdateQuantity = (idProduct, quantity) => {
     setCartItems(
       cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+        item.ProductID === idProduct
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item
       )
     );
   };
+  const totalPrice = cartItems
+    .reduce((acc, item) => acc + item.ProductPrice * item.quantity, 0)
+    .toFixed(3);
+
   return (
-    <div className="cart container my-5">
+    <div className="cart container ">
       <h1 className="cart__title mb-4">Your Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <p className="cart__empty-message">Your cart is empty.</p>
@@ -45,17 +68,22 @@ const ProductCart = () => {
                 className="cart__item row align-items-center py-3"
               >
                 <div className="cart__item-image col-2">
-                  <img src={item.image} alt={item.name} className="img-fluid" />
+                  <img
+                    src={` data:image/jpeg;base64,${item.ProductImage}`}
+                    alt={item.name}
+                    className="img-fluid"
+                  />
                 </div>
                 <div className="cart__item-details col-6">
-                  <h5 className="cart__item-name">{item.name}</h5>
-                  <p className="cart__item-price">${item.price}</p>
+                  <span className="cart__item-id">#{item.ProductID}</span>
+                  <h5 className="cart__item-name">{item.ProductName}</h5>
+                  <p className="cart__item-price">${item.ProductPrice}</p>
                 </div>
-                <div className="cart__item-actions col-4 d-flex justify-content-end align-items-center">
+                <div className="cart__item-actions col-12 d-flex justify-content-end align-items-center">
                   <button
                     className="btn btn-secondary btn-sm"
                     onClick={() =>
-                      handleUpdateQuantity(item.id, item.quantity - 1)
+                      handleUpdateQuantity(item.ProductID, item.quantity - 1)
                     }
                     disabled={item.quantity <= 1}
                   >
@@ -67,14 +95,14 @@ const ProductCart = () => {
                   <button
                     className="btn btn-secondary btn-sm"
                     onClick={() =>
-                      handleUpdateQuantity(item.id, item.quantity + 1)
+                      handleUpdateQuantity(item.ProductID, item.quantity + 1)
                     }
                   >
                     +
                   </button>
                   <button
                     className="btn btn-danger btn-sm ms-3"
-                    onClick={() => handleRemoveItem(item.id)}
+                    onClick={() => handleRemoveItem(item.idCartItem)}
                   >
                     Remove
                   </button>
@@ -82,12 +110,21 @@ const ProductCart = () => {
               </div>
             ))}
           </div>
-          <div className="cart__pay col-md-4 align-items-center">
+          <div className="cart__pay col-md-4 align-items-center col-12">
             <div className="cart__pay-detail">
-              <span className="detail-quantily">Total product : 10</span>
+              <span className="detail-quantily">
+                Product Items: {cartItems.length || "NaN"}
+              </span>
             </div>
-            <h5 className="cart_pay-total">Total : $999,999</h5>
-            <p className="cart__pay-check">CHECK OUT</p>
+            <h6 className="cart_pay-total">
+              Total{" "}
+              <p>
+                $ <span>{totalPrice}</span>
+              </p>
+            </h6>
+            <button className="btn btn-dark">
+              CHECK OUT <TbLock />
+            </button>
           </div>
         </div>
       )}
