@@ -37,6 +37,17 @@ const Categories = {
       throw error;
     }
   },
+
+  getDetailCategories: async (CategoryID) => {
+    const sql_detail = "SELECT * FROM productcategories WHERE CategoryID =  ?";
+    try {
+      const result = await query(sql_detail, [CategoryID]);
+      return result[0];
+    } catch (error) {
+      console.error("Error creating category:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = Categories;

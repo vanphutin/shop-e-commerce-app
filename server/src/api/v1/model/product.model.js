@@ -100,6 +100,17 @@ const Products = {
       throw error;
     }
   },
+  isHeart: async (id, isHeartValue) => {
+    const sql_isHeart = "UPDATE products SET isHeart = ? WHERE ProductID = ?";
+    try {
+      const result = await query(sql_isHeart, [isHeartValue, id]);
+      console.log(`Updated ${result.affectedRows} row(s).`);
+      return result.affectedRows > 0; // Return true if at least one row was updated
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = Products;

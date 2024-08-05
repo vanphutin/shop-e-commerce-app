@@ -29,6 +29,31 @@ const Cart = {
       throw error;
     }
   },
+  getCartItems: async (userID) => {
+    const sql_cartItems = `
+      SELECT p.*, c.quantity, c.size, c.notes,c.idCartItem
+      FROM products p
+      JOIN cartitems c ON p.ProductID = c.ProductID
+      WHERE c.UserID = ?
+    `;
+    try {
+      const result = await query(sql_cartItems, [userID]);
+      return result;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
+  deleteCartItems: async (idCartItem) => {
+    const sql_deleteCartItem = "DELETE FROM cartitems WHERE idCartItem = ?";
+    try {
+      const result = await query(sql_deleteCartItem, [idCartItem]);
+      return result;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = Cart;

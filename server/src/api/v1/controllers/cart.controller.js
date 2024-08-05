@@ -61,3 +61,56 @@ module.exports.postAddToCart = async (req, res) => {
     });
   }
 };
+
+module.exports.getCartItems = async (req, res) => {
+  const userID = req.query.id;
+
+  if (!userID) {
+    return res.status(400).json({
+      code: 400,
+      message: "User ID is required",
+    });
+  }
+
+  try {
+    const cartItems = await Cart.getCartItems(userID);
+
+    if (cartItems.length === 0) {
+      return res.status(404).json({
+        code: 404,
+        message: "No products found in cart",
+      });
+    }
+
+    return res.status(200).json({
+      code: 200,
+      message: "Get cart items successfully",
+      data: cartItems, // Directly return the cart items
+    });
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+    res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+module.exports.deleteCartItems = async (req, res) => {
+  const idCartItem = req.params?.id;
+  try {
+    const deleteCart = await Cart.deleteCartItems(idCartItem);
+    return res.status(200).json({
+      code: 200,
+      message: "Delete cart item successfully",
+    });
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+    res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};

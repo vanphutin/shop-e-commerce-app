@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 const Auth = require("../../v1/model/auth.model");
 const db = require("../../../config/database.config");
-// const { promisify } = require("util");
-// const query = promisify(db.query).bind(db);
+const { promisify } = require("util");
+const query = promisify(db.query).bind(db);
 
 module.exports.authRegister = async (req, res) => {
   const UserID = uuidv4();
@@ -84,6 +84,17 @@ module.exports.authLogin = async (req, res) => {
       authToken,
       loginAuth.UserID,
     ]);
+
+    //return list products
+    const listProducts = await query(
+      `
+      SELECT p.*, c.CategoryName
+      FROM products p
+      JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
+      WHERE p.UserID = ?
+    `,
+      [loginAuth.UserID]
+    );
     res.status(200).json({
       code: 200,
       message: "Login successful",
@@ -103,6 +114,7 @@ module.exports.authLogin = async (req, res) => {
         role: loginAuth.Role,
         delete: loginAuth.Deleted,
         createAt: loginAuth.createAt,
+        products: listProducts,
       },
       token: loginAuth.authToken,
     });
@@ -143,6 +155,16 @@ module.exports.authVeryToken = async (req, res) => {
       if (!loginAuth) {
         return res.status(404).json({ message: "User not found" });
       }
+      //return list products
+      const listProducts = await query(
+        `
+      SELECT p.*, c.CategoryName
+      FROM products p
+      JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
+      WHERE p.UserID = ?
+    `,
+        [loginAuth.UserID]
+      );
 
       res.status(200).json({
         code: 200,
@@ -164,6 +186,7 @@ module.exports.authVeryToken = async (req, res) => {
           delete: loginAuth.Deleted,
           createAt: loginAuth.createAt,
           avatar: loginAuth.UserAvatar,
+          products: listProducts,
         },
         token: loginAuth.authToken,
       });
