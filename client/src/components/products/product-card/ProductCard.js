@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthProvider";
 import { postAddCart } from "../../../services/apiServerviceCart";
+import { postFavouriteProducts } from "../../../services/apiServerviceHeart";
 
 const ProductCard = ({
   productCart,
@@ -37,6 +38,7 @@ const ProductCard = ({
   const [quantity, setQuantily] = useState(1);
   const [category, setCategory] = useState("");
   const [notes, setNotes] = useState("null");
+  const [listHeart, setListHeart] = useState([]);
   const nagigate = useNavigate();
 
   const calculateTimeLeft = () => {
@@ -83,6 +85,32 @@ const ProductCard = ({
     }
   };
 
+  //fetch api  Favourite
+  const fetchApiFavourite = async (userID, productID) => {
+    const res = await postFavouriteProducts(userID, productID);
+    if (res.code !== 200) {
+      return toast.error("error server");
+    }
+    console.log("res", res);
+  };
+
+  const handleFavourite = (id) => {
+    // Lấy tất cả các nút có lớp "action-favourite"
+    const isAction = document.querySelectorAll("button.action-favourite");
+    // Duyệt qua từng nút
+    isAction.forEach((item) => {
+      // Kiểm tra nếu nút có data-id tương ứng với id đã truyền vào
+      if (item.dataset.id === id.toString()) {
+        fetchApiFavourite(user?.id, id);
+        console.log("id", user?.id, id);
+
+        // Thực hiện hành động cần thiết (ví dụ: thêm hoặc loại bỏ lớp "isActive")
+        item.classList.toggle("isActive");
+      }
+    });
+    console.log("list", listHeart);
+  };
+
   return (
     <div className="card">
       <div className={`card-product ${mainclassName}`}>
@@ -117,7 +145,11 @@ const ProductCard = ({
                 >
                   {AddIcon ? <AddIcon /> : "Add To Cart"}
                 </button>
-                <button className="action-favourite">
+                <button
+                  className="action-favourite "
+                  data-id={ProductID}
+                  onClick={() => handleFavourite(ProductID)}
+                >
                   {FavoriteIcon ? <FavoriteIcon /> : <FaHeart />}
                 </button>
                 <button className="action-view">
