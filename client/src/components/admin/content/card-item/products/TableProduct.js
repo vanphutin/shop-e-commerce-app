@@ -5,6 +5,11 @@ import CreateProduct from "./CreateProduct";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { deleteProduct } from "../../../../../services/apiServerviceProduct";
+import { toast } from "react-toastify";
+
 const TableProduct = () => {
   const [show, setShow] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,10 +23,10 @@ const TableProduct = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    if (user?.products) {
+    if (user && user?.products) {
       setProducts(user.products);
     }
-  }, [user]);
+  }, [user && user.products]);
 
   // Tính toán trang hiện tại và các sản phẩm để hiển thị
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -44,6 +49,26 @@ const TableProduct = () => {
     whiteSpace: "normal",
     maxHeight: "90px", // Giới hạn chiều cao tối đa
     boxSizing: "border-box", // Đảm bảo padding và border không làm tăng kích thước tổng thể
+  };
+
+  const [showDelete, setShowDelete] = useState(false);
+
+  const handleCloseDelete = () => setShowDelete(false);
+  const handleShowDelete = () => setShowDelete(true);
+
+  const [dataDelete, setDataDelete] = useState([]);
+  const handleDeleteProduct = (idP, idU) => {
+    setShowDelete(true);
+    setDataDelete([idP, idU]);
+  };
+
+  const handleDelete = async () => {
+    const res = await deleteProduct(dataDelete[0], dataDelete[1]);
+    if (res.code !== 200) {
+      return toast.error("Error when delete !");
+    }
+    toast.success("Delete successfully !");
+    handleCloseDelete();
   };
 
   return (
@@ -93,7 +118,14 @@ const TableProduct = () => {
                 <td className="d-flex ">
                   {/* Add action buttons here */}
                   <button className="btn btn-primary">Edit</button>
-                  <button className="btn btn-danger">Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() =>
+                      handleDeleteProduct(product.ProductID, user?.id)
+                    }
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))
@@ -118,8 +150,40 @@ const TableProduct = () => {
       </Stack>
 
       <CreateProduct show={show} handleClose={handleClose} />
+      <ModalDelete
+        show={showDelete}
+        handleCloseDelete={handleCloseDelete}
+        dataDelete={dataDelete}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
+
+function ModalDelete({ show, handleCloseDelete, handleDelete }) {
+  return (
+    <>
+      <Modal
+        show={show}
+        onHide={handleCloseDelete}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Modal delete product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure ?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDelete}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
 
 export default TableProduct;
