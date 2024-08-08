@@ -22,11 +22,11 @@ module.exports.getAllProducts = async (req, res) => {
         message: "No products found",
       });
     }
-
+    const newProducts = allProducts.filter((product) => product.Deleted === 0);
     res.status(200).json({
       code: 200,
       message: "Get all products successful",
-      data: allProducts,
+      data: newProducts,
     });
   } catch (error) {
     console.log("Error executing query:", error);
@@ -135,49 +135,34 @@ module.exports.getDetailProducts = async (req, res) => {
   }
 };
 
-module.exports.isHeart = async (req, res) => {
-  const id = req.params.id;
+module.exports.deleteProduct = async (req, res) => {
+  const ProductID = req.params.id;
+  const { UserID } = req.body;
+  if (!UserID) {
+    return res.status(404).json({
+      code: 404,
+      sage: "Missing required fields",
+    });
+  }
 
   try {
-    // Check the current status of isHeart for the product
-    const checkIsHeartQuery =
-      "SELECT isHeart FROM products WHERE ProductID = ?";
-    const [product] = await db.query(checkIsHeartQuery, [id]);
-
-    if (!product) {
+    const deleteP = await Products.deleteProduct(ProductID, UserID);
+    if (!deleteP) {
       return res.status(404).json({
         code: 404,
         message: "Product not found",
       });
     }
-
-    // Toggle isHeart value: if 1, set to 0; if 0, set to 1
-    const newIsHeartValue = product.isHeart ? 0 : 1;
-
-    // Update isHeart status
-    const updateResult = await Products.isHeart(id, newIsHeartValue);
-
-    if (updateResult) {
-      return res.status(200).json({
-        code: 200,
-        message: "Product heart status updated successfully",
-        data: {
-          ProductID: id,
-          isHeart: newIsHeartValue,
-        },
-      });
-    } else {
-      return res.status(400).json({
-        code: 400,
-        message: "Failed to update product heart status",
-      });
-    }
-  } catch (error) {
-    console.error("Error fetching product:", error);
+    return res.status(200).json({
+      code: 200,
+      message: "Delete product successfully !",
+    });
+  } catch (err) {
+    console.error("Error fetching product:", err);
     res.status(500).json({
       code: 500,
       message: "Internal Server Error",
-      error: error.message,
+      error: err.message,
     });
   }
 };

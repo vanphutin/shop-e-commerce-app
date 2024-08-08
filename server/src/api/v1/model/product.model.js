@@ -100,12 +100,12 @@ const Products = {
       throw error;
     }
   },
-  isHeart: async (id, isHeartValue) => {
-    const sql_isHeart = "UPDATE products SET isHeart = ? WHERE ProductID = ?";
+  deleteProduct: async (ProductID, UserID) => {
+    const sql_delete =
+      "UPDATE products SET Deleted=1 WHERE ProductID = ? AND UserID = ?";
     try {
-      const result = await query(sql_isHeart, [isHeartValue, id]);
-      console.log(`Updated ${result.affectedRows} row(s).`);
-      return result.affectedRows > 0; // Return true if at least one row was updated
+      const result = await query(sql_delete, [ProductID, UserID]);
+      return result;
     } catch (error) {
       console.error("Error executing query:", error);
       throw error;
