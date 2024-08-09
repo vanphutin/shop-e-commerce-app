@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { deleteProduct } from "../../../../../services/apiServerviceProduct";
 import { toast } from "react-toastify";
+import UpdateProduct from "./UpdateProduct";
 
 const TableProduct = () => {
   const [show, setShow] = useState(false);
@@ -71,6 +72,15 @@ const TableProduct = () => {
     handleCloseDelete();
   };
 
+  const [showEdit, setShowEdit] = useState(false);
+  const handleCloseEdit = () => setShowEdit(false);
+  const [dataEdit, setDataEdit] = useState([]);
+
+  const handleUpdateProduct = (idP, idU) => {
+    setShowEdit(true);
+    setDataEdit([idP, idU]);
+  };
+
   return (
     <div className="mt-3">
       <button className="btn btn-dark" onClick={handleCreateProduct}>
@@ -117,7 +127,14 @@ const TableProduct = () => {
                 <td>{product.ProductStock}</td>
                 <td className="d-flex ">
                   {/* Add action buttons here */}
-                  <button className="btn btn-primary">Edit</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                      handleUpdateProduct(product.ProductID, user?.id)
+                    }
+                  >
+                    Edit
+                  </button>
                   <button
                     className="btn btn-danger"
                     onClick={() =>
@@ -155,6 +172,11 @@ const TableProduct = () => {
         handleCloseDelete={handleCloseDelete}
         dataDelete={dataDelete}
         handleDelete={handleDelete}
+      />
+      <UpdateProduct
+        showEdit={showEdit}
+        handleCloseEdit={handleCloseEdit}
+        dataEdit={dataEdit}
       />
     </div>
   );
