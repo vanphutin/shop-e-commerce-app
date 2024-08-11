@@ -6,6 +6,7 @@ const uploadProduct = require("../middleware/uploadProduct");
 
 router.get("/", productController.getAllProducts);
 router.patch("/delete/:id", productController.deleteProduct);
+router.patch("/update/:id", productController.updateProduct);
 router.post("/create", uploadProduct, productController.createProducts);
 router.get("/detail/:id", productController.getDetailProducts);
 

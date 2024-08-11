@@ -166,3 +166,56 @@ module.exports.deleteProduct = async (req, res) => {
     });
   }
 };
+
+module.exports.updateProduct = async (req, res) => {
+  const ProductID = req.params.id;
+  const {
+    ProductName,
+    ProductPrice,
+    ProductWeight,
+    ProductLongDesc,
+    ProductStock,
+    UserID,
+  } = req.body;
+  if (
+    !ProductName ||
+    !ProductPrice ||
+    !ProductWeight ||
+    !ProductLongDesc ||
+    !ProductStock ||
+    !UserID
+  ) {
+    return res.status(404).json({
+      code: 404,
+      sage: "Missing required fields",
+    });
+  }
+  try {
+    const update = await Products.updateProduct(
+      ProductID,
+      ProductName,
+      ProductPrice,
+      ProductWeight,
+      ProductLongDesc,
+      ProductStock,
+      UserID
+    );
+    if (!update) {
+      return res.status(404).json({
+        code: 404,
+        message: "Product not found",
+      });
+    }
+    return res.status(200).json({
+      code: 200,
+      message: "Update successfully",
+    });
+  } catch (err) {
+    console.error("Error fetching product:", err);
+    res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+};

@@ -111,6 +111,41 @@ const Products = {
       throw error;
     }
   },
+  updateProduct: async (
+    ProductID,
+    ProductName,
+    ProductPrice,
+    ProductWeight,
+    ProductLongDesc,
+    ProductStock,
+    UserID
+  ) => {
+    const sql_update = `
+    UPDATE products 
+    SET ProductName = ?, 
+      ProductPrice = ?, 
+      ProductWeight = ?, 
+      ProductLongDesc = ?, 
+      ProductStock = ? 
+    WHERE ProductID = ? 
+    AND UserID = ?;
+`;
+    try {
+      const result = await query(sql_update, [
+        ProductName,
+        ProductPrice,
+        ProductWeight,
+        ProductLongDesc,
+        ProductStock,
+        ProductID,
+        UserID,
+      ]);
+      return result;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = Products;
