@@ -1,10 +1,32 @@
 import axios from "../utils/AxiosCustom";
 
-// Hàm getAllProducts lấy tất cả sản phẩm cho một người dùng dựa trên id
-const getAllProducts = (id) => {
-  return axios.get("/product", {
-    params: { id }, // Truyền id dưới dạng tham số truy vấn
-  });
+const getAllProducts = async (sort, categories, page) => {
+  let url = "/product?";
+
+  if (sort) {
+    url += `sort=${sort}&`;
+  }
+
+  if (categories && categories.length > 0) {
+    url += `categories=${categories.join(",")}&`;
+  }
+  if (page) {
+    url += `page=${page}&`;
+  }
+
+  // Xóa '&' cuối nếu cần thiết
+  url = url.endsWith("&") ? url.slice(0, -1) : url;
+
+  try {
+    const response = await axios.get(url);
+    return response; // Trả về dữ liệu từ phản hồi
+  } catch (error) {
+    console.error(
+      "Error fetching products:",
+      error.response ? error.response.data : error.message
+    );
+    throw error; // Ném lỗi để người gọi xử lý
+  }
 };
 
 const postCreateProduct = async (
@@ -48,5 +70,34 @@ const postCreateProduct = async (
   }
 };
 
+const getDetailProduct = (id) => {
+  return axios.get(`product/detail/${id}`);
+};
+const deleteProduct = (ProductID, UserID) => {
+  return axios.patch(`product/delete/${ProductID}`, { UserID });
+};
+
+const updateProduct = (
+  ProductID,
+  ProductName,
+  ProductPrice,
+  ProductWeight,
+  ProductLongDesc,
+  ProductStock,
+  UserID
+) => {
+  return axios.patch(`product/update/${ProductID}`, {
+    ProductName,
+    ProductPrice,
+    ProductWeight,
+    ProductLongDesc,
+    ProductStock,
+    UserID,
+  });
+};
+
 export { getAllProducts };
 export { postCreateProduct };
+export { getDetailProduct };
+export { deleteProduct };
+export { updateProduct };

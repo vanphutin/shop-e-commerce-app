@@ -4,17 +4,18 @@ import Modal from "react-bootstrap/Modal";
 import { getAllCategories } from "../../../../../services/apiServerviceCategorie";
 import { toast } from "react-toastify";
 import CreateCategoryForm from "./CreateCategoryForm";
-import { postCreateProduct } from "../../../../../services/apiServerviceProduct";
+import {
+  getDetailProduct,
+  postCreateProduct,
+  updateProduct,
+} from "../../../../../services/apiServerviceProduct";
 import { AuthContext } from "../../../../../context/AuthProvider";
 
 const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
-  console.log("dataEdit", dataEdit);
-
   const { user } = useContext(AuthContext);
 
   const [categories, setCategories] = useState([]);
   const [ProductCategoryID, setProductCategoryID] = useState("");
-
   const [ProductName, setProductName] = useState("");
   const [ProductPrice, setProductPrice] = useState(0);
   const [ProductWeight, setProductWeight] = useState(0);
@@ -26,7 +27,11 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+    if (dataEdit && dataEdit.length > 0) {
+      handleViewProduct(dataEdit[0]);
+    }
+    preViewImg(ProductImage);
+  }, [dataEdit[0], ProductImage, user?.products]);
 
   const fetchCategories = async () => {
     try {
@@ -45,29 +50,18 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
   const handleCategoryCreated = () => {
     fetchCategories();
   };
-
-  const handleSubmitCreateProduct = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await postCreateProduct(
-        ProductName,
-        ProductPrice,
-        ProductWeight,
-        ProductLongDesc,
-        ProductCategoryID,
-        ProductStock,
-        ProductImage,
-        user?.id
-      );
-      if (res.code === 201) {
-        toast.success("Product created successfully!");
-        handleCloseEdit();
-      } else {
-        toast.error(res.data.message);
+  const handleViewProduct = async () => {
+    if (dataEdit && dataEdit.length > 0) {
+      const res = await getDetailProduct(dataEdit[0]);
+      if (res.code === 200) {
+        setProductName(res.data.ProductName);
+        setProductImage(res.data.ProductImage);
+        setProductCategoryID(res.data.ProductCategoryID);
+        setProductStock(res.data.ProductStock);
+        setProductWeight(res.data.ProductWeight);
+        setProductPrice(res.data.ProductPrice);
+        setProductLongDesc(res.data.ProductLongDesc);
       }
-    } catch (error) {
-      console.error("Error creating product:", error);
-      toast.error("Failed to create product.");
     }
   };
 
@@ -78,10 +72,31 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
       setProductImage(uploadFileAvatar);
     }
   };
+
+  const preViewImg = (ProductImage) => {
+    setFile(ProductImage);
+  };
   const handleCategoryChange = (event) => {
     setProductCategoryID(event.target.value);
   };
 
+  const handleSubmitUpdateProduct = async (e) => {
+    e.preventDefault();
+    const res = await updateProduct(
+      dataEdit[0],
+      ProductName,
+      ProductPrice,
+      ProductWeight,
+      ProductLongDesc,
+      ProductStock,
+      user?.id
+    );
+    if (res.code !== 200) {
+      return toast.error("Error server !");
+    }
+    handleCloseEdit(false);
+    return toast.success("Update product successfully");
+  };
   return (
     <Modal show={showEdit} onHide={handleCloseEdit} size="xl">
       <Modal.Header closeButton>
@@ -95,39 +110,15 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
                 <div className="card card-registration my-4">
                   <div className=" ">
                     <div className="">
-                      <form onSubmit={handleSubmitCreateProduct}>
+                      <form onSubmit={handleSubmitUpdateProduct}>
                         <div className="card-body  text-black">
                           <div className="row">
                             <CreateCategoryForm
+                              showBtn={false}
                               onCategoryCreated={handleCategoryCreated}
+                              CategoryNameID={`CategoryID : ${ProductCategoryID}`}
+                              disabled={true}
                             />
-                            <div
-                              data-mdb-input-init
-                              className="form-outline mb-4"
-                            >
-                              <label
-                                className="form-label"
-                                htmlFor="form3Example97"
-                                style={{ marginRight: "10px" }}
-                              >
-                                Category
-                              </label>
-
-                              <select
-                                name="ProductCategoryID"
-                                value={ProductCategoryID}
-                                onChange={handleCategoryChange} // Added onChange handler
-                              >
-                                {categories.map((category) => (
-                                  <option
-                                    key={category.CategoryID}
-                                    value={category.CategoryID}
-                                  >
-                                    {category.CategoryName}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
 
                             <div className="col-md-6 mb-4">
                               <div data-mdb-input-init className="form-outline">
@@ -231,7 +222,10 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
                               Descript
                             </label>
                             <textarea
-                              style={{ width: "-webkit-fill-available" }}
+                              style={{
+                                width: "-webkit-fill-available",
+                                minHeight: "200px",
+                              }}
                               name="ProductLongDesc"
                               value={ProductLongDesc}
                               onChange={(e) =>
@@ -250,15 +244,21 @@ const UpdateProduct = ({ showEdit, handleCloseEdit, dataEdit }) => {
                             >
                               ProductImage
                             </label>
-                            <input
-                              type="file"
-                              id="form3Example90"
-                              className="form-control form-control-lg"
-                              name="ProductImage"
-                              accept="image/*"
-                              onChange={handleImageChange}
+                            <span
+                              style={{
+                                border: "1px solid #ffc107",
+                                backgroundColor: "red",
+                                color: "#Fff",
+                                marginLeft: "10px",
+                              }}
+                            >
+                              Cannot edit image due to sensitivity!
+                            </span>
+                            <img
+                              src={`data:image/png;base64,${file}`}
+                              alt=""
+                              style={{ width: "200px", display: "block" }}
                             />
-                            <img src={file} alt="" style={{ width: "200px" }} />
                           </div>
 
                           <Modal.Footer>
