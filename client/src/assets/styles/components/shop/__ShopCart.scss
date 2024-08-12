@@ -1,0 +1,102 @@
+.shop__list {
+  .shop__list-title {
+    .title {
+      margin: 5px 0;
+      color: #000;
+    }
+  }
+  .shop__list-user {
+    margin-top: 30px;
+    .shop {
+      .shop__item {
+        .shop__item-avata {
+          cursor: pointer;
+          img {
+            object-fit: contain;
+          }
+        }
+      }
+
+      .shop__item-info {
+        .shop__item-who {
+          color: #fff;
+          background-color: rgb(137, 168, 33);
+          display: inline;
+          padding: 3px 10px;
+          text-transform: uppercase;
+        }
+
+        .shop__item-name {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
+
+        .shop__item-username {
+          font-size: 1.2rem;
+          color: #ccc;
+          font-weight: 400;
+        }
+
+        .shop__item-city {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }
+
+  ul.shop__list-items {
+    padding: 0;
+    margin: 10px 0;
+    li.shop__list-item {
+      list-style: none;
+      padding: 0;
+      .shop {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 0;
+        height: 300px;
+        margin: 0 5px;
+
+        .shop__item {
+          text-align: center;
+          .shop__item-avata {
+            cursor: pointer;
+            margin-bottom: 15px;
+            img {
+              object-fit: contain;
+            }
+          }
+        }
+
+        .shop__item-info {
+          .shop__item-who {
+            color: #fff;
+            background-color: rgb(137, 168, 33);
+            display: inline;
+            padding: 3px 10px;
+            text-transform: uppercase;
+          }
+
+          .shop__item-name {
+            font-size: 1.5rem;
+            font-weight: 500;
+          }
+
+          .shop__item-username {
+            font-size: 1.2rem;
+            color: #ccc;
+            font-weight: 400;
+          }
+
+          .shop__item-city {
+            font-size: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+}
