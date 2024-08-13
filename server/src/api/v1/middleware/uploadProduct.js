@@ -1,33 +1,27 @@
 const multer = require("multer");
 const path = require("path");
 
-// Set storage engine
+// Cấu hình storage
 const storage = multer.diskStorage({
-  destination: "./uploads/products",
+  destination: "./uploads/products", // Đường dẫn lưu ảnh
   filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
+    const ProductID = req.body.ProductID || Date.now();
+    cb(null, ProductID + path.extname(file.originalname)); // Lưu ảnh với tên dựa trên ID sản phẩm
   },
 });
 
-// Initialize upload variable
 const uploadProduct = multer({
   storage: storage,
-  limits: { fileSize: 1000000 }, // 1MB
+  limits: { fileSize: 5000000 }, // 1MB
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single("ProductImage"); // "avatar" is the field name
+}).single("ProductImage");
 
-// Check file type
+// Hàm kiểm tra loại tệp
 function checkFileType(file, cb) {
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
+  const filetypes = /jpeg|jpg|webp|png|gif/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
   const mimetype = filetypes.test(file.mimetype);
 
   if (mimetype && extname) {

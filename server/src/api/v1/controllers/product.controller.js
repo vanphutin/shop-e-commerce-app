@@ -45,17 +45,14 @@ module.exports.createProducts = async (req, res) => {
       ProductPrice,
       ProductWeight,
       ProductLongDesc,
-
       ProductCategoryID,
       ProductStock,
       UserID,
     } = req.body;
 
-    let { ProductImage } = req.body;
+    let ProductImage;
     if (req.file) {
-      const imagePath = req.file.path;
-      const imageData = fs.readFileSync(imagePath);
-      ProductImage = imageData.toString("base64"); // Convert to base64 string
+      ProductImage = req.file.path.replace(/\\/g, "/"); // Lưu đường dẫn ảnh
     }
 
     if (
@@ -70,23 +67,25 @@ module.exports.createProducts = async (req, res) => {
     ) {
       return res.status(404).json({
         code: 404,
-        sage: "Missing required fields",
+        message: "Missing required fields",
       });
     }
+
     const create = await Products.createProducts(
       ProductID,
       ProductName,
       ProductPrice,
       ProductWeight,
       ProductLongDesc,
-      ProductImage,
+      ProductImage, // Lưu đường dẫn ảnh vào DB
       ProductCategoryID,
       ProductStock,
       UserID
     );
+
     res.status(201).json({
       code: 201,
-      message: "Create  product successful",
+      message: "Create product successful",
       data: create,
     });
   } catch (error) {
@@ -121,6 +120,7 @@ module.exports.getDetailProducts = async (req, res) => {
         ProductLongDesc: productDetail.ProductLongDesc,
         userCity: productDetail.userCity,
         UserName: productDetail.UserName,
+        UserID: productDetail.UserID,
         createdAt: productDetail.createdAt,
         updatedAt: productDetail.updatedAt,
       },

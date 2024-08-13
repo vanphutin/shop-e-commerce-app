@@ -1,18 +1,17 @@
 const User = require("../model/user.model");
-const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
+const path = require("path");
 
 module.exports.registerSeller = async (req, res) => {
   try {
     const { id, UserFirstName, UserLastName, UserCity, UserCountry } = req.body;
-    let { UserAvatar } = req.body;
+    let UserAvatar = null;
     const Role = "seller";
 
     // If a file is uploaded
     if (req.file) {
-      const avatarPath = req.file.path;
-      const avatarData = fs.readFileSync(avatarPath);
-      UserAvatar = avatarData.toString("base64"); // Convert to base64 string
+      UserAvatar = req.file.path.replace(/\\/g, "/"); // Lưu đường dẫn ảnh
     }
 
     if (
@@ -58,7 +57,6 @@ module.exports.registerSeller = async (req, res) => {
     });
   }
 };
-
 module.exports.createProducts = async (req, res) => {
   const ProductID = uuidv4();
   try {
@@ -95,7 +93,7 @@ module.exports.getAllUsers = async (req, res) => {
 
     // Tạo dữ liệu người dùng
     const users = getUser.map((user) => ({
-      id: user.userID,
+      id: user.UserID,
       avatar: user.UserAvatar,
       username: user.UserName,
       city: user.UserCity,
@@ -112,6 +110,49 @@ module.exports.getAllUsers = async (req, res) => {
       code: 200,
       message: "Users retrieved successfully",
       data: users, // Trả về danh sách người dùng
+    });
+  } catch (error) {
+    console.log("Error executing query:", error);
+    res.status(500).json({
+      code: 500,
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports.getUser = async (req, res) => {
+  const UserID = req.params.id;
+  if (!UserID) {
+    return res.status(400).json({
+      code: 400,
+      message: "Missing id",
+    });
+  }
+  try {
+    const getUserDetail = await User.getUser(UserID);
+    if (getUserDetail.length <= 0) {
+      return res.status(400).json({
+        code: 400,
+        message: "Don't find user",
+      });
+    }
+    const user = getUserDetail[0];
+    return res.status(200).json({
+      code: 200,
+      message: "Get user success",
+      data: {
+        id: user.UserID,
+        avatar: user.UserAvatar,
+        username: user.UserName,
+        city: user.UserCity,
+        country: user.UserCountry,
+        lastname: user.UserLastName,
+        firstname: user.UserFirstName,
+        email: user.UserEmail,
+        gender: user.Gender,
+        role: user.role,
+        birthday: user.birthday,
+      },
     });
   } catch (error) {
     console.log("Error executing query:", error);
