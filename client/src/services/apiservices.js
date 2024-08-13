@@ -82,7 +82,14 @@ const patchRegisterSeller = async (
     throw error;
   }
 };
-
+const getAllUsers = (userID) => {
+  let url = "/user?";
+  if (userID) {
+    url += `userID=${userID}`;
+  }
+  return axios.get(url);
+};
 export { postCreateUser };
 export { postLogin };
 export { patchRegisterSeller };
+export { getAllUsers };

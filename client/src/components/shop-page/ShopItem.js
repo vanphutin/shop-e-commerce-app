@@ -11,14 +11,14 @@ const ShopItem = ({
   who,
   btnEdit,
 }) => {
-  const { image, name, username, city } = shopList;
+  const { avatar, lastname, firstname, username, city, address } = shopList;
   return (
     <div className="shop ">
       <div className={`shop__item ${rowItem} `}>
         <div className={`shop__item-avata ${avatarClassName}`}>
           <img
-            src={image}
-            alt=""
+            src={`	data:image/jpeg;base64,${avatar}`}
+            alt={`${firstname} ${lastname}`}
             className="avata-user"
             width="150px"
             height="150px"
@@ -26,11 +26,13 @@ const ShopItem = ({
         </div>
         <div className={`shop__item-info ${infoClassName}`}>
           {who ? <div className="shop__item-who">{who}</div> : ""}
-          <div className="shop__item-name">{name}</div>
+          <div className="shop__item-name">
+            {firstname} {lastname}
+          </div>
           <div className="shop__item-username">@{username}</div>
           <div className="shop__item-city">
             <FaLocationDot size="15px" />
-            {city}
+            {city || address?.city}
           </div>
           {btnEdit && (
             <button className="btn btn-dark btn-sm shop__item-edit">
@@ -49,6 +51,7 @@ ShopItem.propTypes = {
     name: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     city: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
   }).isRequired,
   hr: PropTypes.bool,
   avatarClassName: PropTypes.string,
