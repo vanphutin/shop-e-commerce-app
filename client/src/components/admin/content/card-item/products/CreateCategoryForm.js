@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { createCategory } from "../../../../../services/apiServerviceCategorie";
 import { toast } from "react-toastify";
 
-const CreateCategoryForm = ({ onCategoryCreated }) => {
+const CreateCategoryForm = ({
+  onCategoryCreated,
+  showBtn,
+  CategoryNameID,
+  disabled,
+}) => {
   const [categoryName, setCategoryName] = useState("");
 
   const handleCreateCategory = async (e) => {
@@ -29,12 +34,17 @@ const CreateCategoryForm = ({ onCategoryCreated }) => {
         name="categoryName"
         value={categoryName}
         onChange={(e) => setCategoryName(e.target.value)}
-        placeholder="Category Name"
+        placeholder={CategoryNameID}
+        disabled={disabled}
         className="form-control mb-3 w-50"
       />
-      <button className="btn btn-dark btn-sm" onClick={handleCreateCategory}>
-        + Create Category
-      </button>
+      {showBtn ? (
+        <button className="btn btn-dark btn-sm" onClick={handleCreateCategory}>
+          + Create Category
+        </button>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
