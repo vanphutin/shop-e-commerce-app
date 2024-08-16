@@ -13,12 +13,12 @@ const formatShopData = (shopProduct) => {
   );
 
   const products = shopProduct.map((item) => ({
-    idProduct: item.ProductID,
-    nameProduct: item.ProductName || "N/A",
-    priceProduct: item.ProductPrice || 0,
-    imageUrlProduct: `http://localhost:8081/${item.ProductImage}`,
-    descriptionProduct: item.ProductLongDesc || "No description",
-    stockProduct: item.ProductStock || 0,
+    ProductID: item.ProductID,
+    ProductName: item.ProductName || "N/A",
+    ProductPrice: item.ProductPrice || 0,
+    ProductImage: `http://localhost:8081/${item.ProductImage}`,
+    ProductLongDesc: item.ProductLongDesc || "No description",
+    ProductStock: item.ProductStock || 0,
   }));
 
   return {
