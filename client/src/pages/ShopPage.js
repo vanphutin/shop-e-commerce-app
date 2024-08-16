@@ -39,6 +39,7 @@ const ShopPage = () => {
             hr={true}
             rowItem="row"
             who="you"
+            LinkTo="detail"
             btnEdit={true}
           />
         </div>
@@ -47,13 +48,7 @@ const ShopPage = () => {
         {users && users.length > 0
           ? users.map((item, index) => (
               <li className="shop__list-item col-3 mt-3" key={index}>
-                <ShopItem
-                  //   infoClassName="col-9"
-                  //   avatarClassName="col-3"
-                  shopList={item}
-                  hr={false}
-                  who=""
-                />
+                <ShopItem shopList={item} hr={false} who="" LinkTo="detail" />
               </li>
             ))
           : "No Data"}
