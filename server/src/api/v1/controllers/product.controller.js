@@ -219,3 +219,31 @@ module.exports.updateProduct = async (req, res) => {
     });
   }
 };
+
+module.exports.getSearchProducts = async (req, res) => {
+  const { keyword } = req.query;
+  console.log("req", req.query);
+
+  try {
+    const search = await Products.getSearchProducts(keyword);
+    if (search.length <= 0 || !search) {
+      return res.status(400).json({
+        code: 404,
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      code: 200,
+      message: "Successfully",
+      data: search,
+    });
+  } catch (error) {
+    console.error("Error fetching product:", err);
+    res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      error: err.message,
+    });
+  }
+};

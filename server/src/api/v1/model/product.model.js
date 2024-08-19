@@ -88,7 +88,7 @@ const Products = {
   },
   getDetailProducts: async (id) => {
     const sql_detail = `
-      SELECT p.*, u.userCity, u.UserName 
+      SELECT p.*, u.userCity, u.UserName , u.UserID
       FROM products p 
       JOIN users u ON p.UserID = u.UserID 
       WHERE ProductID = ?`;
@@ -140,6 +140,31 @@ const Products = {
         ProductID,
         UserID,
       ]);
+      return result;
+    } catch (error) {
+      console.error("Error executing query:", error);
+      throw error;
+    }
+  },
+
+  getSearchProducts: async (keyword) => {
+    let sql_search = `SELECT p.*, c.CategoryName
+     FROM products p
+    JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
+     `;
+
+    // Kiểm tra nếu có keyword
+    if (keyword && keyword.length > 0) {
+      sql_search += ` WHERE ProductName LIKE ?`; // Sử dụng dấu ? để binding
+    }
+
+    try {
+      // Nếu có keyword, thêm % vào keyword để tìm kiếm theo mẫu
+      const result =
+        keyword && keyword.length > 0
+          ? await query(sql_search, [`%${keyword}%`]) // Binding giá trị keyword với %
+          : await query(sql_search); // Nếu không có keyword, chỉ thực hiện query bình thường
+
       return result;
     } catch (error) {
       console.error("Error executing query:", error);
