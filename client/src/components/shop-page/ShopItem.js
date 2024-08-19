@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { FaLocationDot } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 
 const ShopItem = ({
   shopList,
@@ -10,19 +12,23 @@ const ShopItem = ({
   rowItem,
   who,
   btnEdit,
+  LinkTo,
+  chat,
 }) => {
-  const { avatar, lastname, firstname, username, city, address } = shopList;
+  const { id, avatar, lastname, firstname, username, city, address } = shopList;
   return (
     <div className="shop ">
       <div className={`shop__item ${rowItem} `}>
         <div className={`shop__item-avata ${avatarClassName}`}>
-          <img
-            src={`	data:image/jpeg;base64,${avatar}`}
-            alt={`${firstname} ${lastname}`}
-            className="avata-user"
-            width="150px"
-            height="150px"
-          />
+          <Link to={`${LinkTo}/${id}`}>
+            <img
+              src={`	data:image/jpeg;base64,${avatar}`}
+              alt={`${firstname} ${lastname}`}
+              className="avata-user"
+              width="150px"
+              height="150px"
+            />
+          </Link>
         </div>
         <div className={`shop__item-info ${infoClassName}`}>
           {who ? <div className="shop__item-who">{who}</div> : ""}
@@ -39,6 +45,13 @@ const ShopItem = ({
               Edit
             </button>
           )}
+          {chat && (
+            <div className="shop__item-chat">
+              {" "}
+              <IoChatbubbleEllipsesSharp />
+              Chat
+            </div>
+          )}
         </div>
       </div>
       {hr ? <hr /> : ""}
@@ -47,6 +60,7 @@ const ShopItem = ({
 };
 ShopItem.propTypes = {
   shopList: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
@@ -59,6 +73,7 @@ ShopItem.propTypes = {
   who: PropTypes.string,
   rowItem: PropTypes.string,
   btnEdit: PropTypes.bool,
+  chat: PropTypes.bool,
 };
 
 export default ShopItem;
