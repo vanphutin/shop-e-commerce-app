@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import { deleteProduct } from "../../../../../services/apiServerviceProduct";
 import { toast } from "react-toastify";
 import UpdateProduct from "./UpdateProduct";
+import HOST_IMG from "../../../../common/HostImg";
 
 const TableProduct = () => {
   const [show, setShow] = useState(false);
@@ -114,7 +115,7 @@ const TableProduct = () => {
                   <img
                     src={
                       product.ProductImage
-                        ? `data:image/png;base64,${product.ProductImage}`
+                        ? `${HOST_IMG}/${product.ProductImage}`
                         : "no image"
                     }
                     alt="Product"
