@@ -105,7 +105,7 @@ const HeaderPage = () => {
                   </Link>
                 </p>
                 <p onClick={() => {}} className="me-4 p-0 mb-0">
-                  <Link to="/cart" state={{ id: user.id }}>
+                  <Link to="/cart" state={{ id: user?.id }}>
                     <FaCartPlus fontSize="25px" />
                   </Link>
                 </p>
@@ -134,7 +134,7 @@ const HeaderPage = () => {
                     className="dropdown-menu text-small  "
                     style={{ right: "0" }}
                   >
-                    {user.role === "seller" ? (
+                    {user?.role === "seller" ? (
                       <li>
                         <Link to="/admin" className="dropdown-item">
                           Admin

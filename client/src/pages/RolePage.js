@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const RolePage = () => {
   const { user } = useContext(AuthContext);
   const linkPath = user
-    ? user.role === "seller"
+    ? user?.role === "seller"
       ? "/"
       : `/register-seller/${user.id}`
     : "/login";
