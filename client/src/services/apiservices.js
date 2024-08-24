@@ -89,7 +89,44 @@ const getAllUsers = (userID) => {
   }
   return axios.get(url);
 };
+const getUser = (userID) => {
+  return axios.get(`/user/${userID}`);
+};
+
+const updateUser = async (
+  userID,
+  firstname,
+  lastname,
+  avatar, // This should be the file object
+  city,
+  country,
+  gender
+) => {
+  try {
+    //firstname, lastname, city, coutry, gender, userID
+    const form = new FormData();
+    form.append("userID", userID);
+    form.append("firstname", firstname);
+    form.append("lastname", lastname);
+    form.append("city", city);
+    form.append("country", country);
+    form.append("gender", gender);
+    form.append("UserAvatar", avatar); // Ensure this matches the field name in the server
+
+    const response = await axios.patch("/user", form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response; // Return the full Axios response object
+  } catch (error) {
+    // Re-throw the error so it can be handled by the caller
+    throw error;
+  }
+};
 export { postCreateUser };
 export { postLogin };
 export { patchRegisterSeller };
 export { getAllUsers };
+export { getUser };
+export { updateUser };

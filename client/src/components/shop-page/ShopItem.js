@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
+import HOST_IMG from "../common/HostImg";
 
 const ShopItem = ({
   shopList,
@@ -22,7 +23,7 @@ const ShopItem = ({
         <div className={`shop__item-avata ${avatarClassName}`}>
           <Link to={`${LinkTo}/${id}`}>
             <img
-              src={`	data:image/jpeg;base64,${avatar}`}
+              src={`${HOST_IMG}/${avatar}`}
               alt={`${firstname} ${lastname}`}
               className="avata-user"
               width="150px"
@@ -41,9 +42,11 @@ const ShopItem = ({
             {city || address?.city}
           </div>
           {btnEdit && (
-            <button className="btn btn-dark btn-sm shop__item-edit">
-              Edit
-            </button>
+            <Link to="/profile">
+              <button className="btn btn-dark btn-sm shop__item-edit">
+                Edit
+              </button>
+            </Link>
           )}
           {chat && (
             <div className="shop__item-chat">

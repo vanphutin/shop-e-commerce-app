@@ -1,0 +1,73 @@
+.shop__profile {
+  margin-top: 20px;
+  .shop__profile-main {
+    .shop {
+      .shop__item {
+        .shop__item-info {
+          .shop__item-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            font-family: "Space Mono", monospace;
+          }
+
+          .shop__item-username {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 5px;
+          }
+
+          .shop__item-city,
+          .shop__item-chat {
+            font-size: 1.3rem;
+            color: #000;
+            font-weight: 400;
+          }
+
+          .shop__item-chat {
+            border-top: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 5px 20px 5px 3px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  .shop__profile-body {
+    .shop__profile-body-title {
+      color: rgb(0, 0, 0);
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+
+    .title-info-categories {
+      ul {
+        display: flex;
+        align-items: start;
+        justify-content: start;
+        padding-left: 0;
+        margin-top: 10px;
+        li {
+          list-style: none;
+          font-size: 0.7rem;
+          padding: 5px 20px;
+          margin: 0px 10px;
+          border: 1px solid #8f8f8f;
+          cursor: pointer;
+          border-radius: 20px;
+
+          &:hover {
+            border: 1px solid #000;
+          }
+
+          &.active {
+            border: 1px solid #b35454;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}

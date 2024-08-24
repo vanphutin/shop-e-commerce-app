@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+.card-dashboad {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  border-radius: 10px;
+  background: #fff;
+  .card-dashboad__main {
+    padding: 15px;
+
+    .card-dashboad__main-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .icon {
+        background: rgba(216, 216, 251, 0.45);
+        padding: 15px;
+        border-radius: 10px;
+        svg {
+          font-size: 1.5rem;
+          text-align: center;
+          color: rgb(0, 0, 0);
+        }
+      }
+    }
+
+    .card-dashboad__main-data {
+      .main-data__title {
+        font-weight: 600;
+        color: #1b1b1bb6;
+        margin-bottom: 0;
+        font-size: 1rem;
+      }
+      .main-data__parameter {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+    }
+  }
+}

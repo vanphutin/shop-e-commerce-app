@@ -1,0 +1,35 @@
+.sidebar {
+  .sidebar-title {
+    h2 {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 1.7rem;
+    }
+  }
+  ul {
+    padding: 0;
+    border: 1px solid #cccccc8c;
+    background: #fff;
+    height: 300px;
+    overflow: auto;
+    width: 205px;
+
+    form {
+      overflow: auto;
+    }
+
+    h6 {
+      text-align: center;
+      background-color: rgba(114, 198, 161, 0.379);
+      font-size: 1.2rem;
+      margin: 20px 0;
+    }
+    .form-check {
+      margin-left: 20px;
+    }
+  }
+  ul.sort {
+    width: 205px;
+    height: 150px;
+  }
+}

@@ -3,6 +3,7 @@ import HeaderPage from "./HeaderPage";
 import Carousel from "../components/banner-slide/Carousel";
 import OptionPromo from "../components/option-promo/OptionPromo";
 import ProductsPage from "./ProductsPage";
+import RolePage from "./RolePage";
 
 const HomePage = () => {
   return (
@@ -12,6 +13,7 @@ const HomePage = () => {
         <Carousel />
         <OptionPromo />
         <ProductsPage />
+        <RolePage />
       </div>
     </main>
   );

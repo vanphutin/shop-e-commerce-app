@@ -1,0 +1,21 @@
+/* MainLayout.css */
+
+.main-layout {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #f4f4f4; /* Thay đổi theo nhu cầu */
+  padding: 15px;
+  height: 100vh; /* Đảm bảo sidebar chiếm toàn bộ chiều cao */
+
+  .form-check {
+    width: 90px;
+  }
+}
+
+.product-items {
+  flex: 1; /* Chiếm phần còn lại của không gian */
+  padding: 15px;
+}

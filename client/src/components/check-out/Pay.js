@@ -1,25 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import ProductCart from "../products/product-cart/ProductCart";
 import ProductCard from "../products/product-card/ProductCard";
 import { getCartItems } from "../../services/apiServerviceCart";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FormPay from "./FormPay";
 import { CiMoneyCheck1 } from "react-icons/ci";
+import { AuthContext } from "../../context/AuthProvider";
+import { postOrder } from "../../services/apiServerviceOrder";
 
 const Pay = () => {
+  const { user } = useContext(AuthContext);
   const [productItem, setProductItem] = useState([]);
   const location = useLocation();
-  const { id } = location.state || {};
+
+  const { idOrder } = location.state || {};
+  const { idUser } = location.state || {};
   const { totalPrice } = location.state || {};
   const { product } = location.state || {};
+  let product_id = [];
 
   useEffect(() => {
-    if (id) {
-      fetchCartItems(id);
+    if (idUser) {
+      fetchCartItems(idUser);
     }
-  }, [id]);
+  }, [idUser]);
   const fetchCartItems = async (id) => {
     try {
       const res = await getCartItems(id);
@@ -32,19 +38,48 @@ const Pay = () => {
       console.log("error", error);
     }
   };
+  const getInfoPay = () => {
+    if (productItem) {
+      productItem.forEach((items) => {
+        while (product_id.length < productItem.length) {
+          product_id.push(items.ProductID);
+        }
+      });
+    }
+  };
+  const handleSubmitInfoPay = async () => {
+    getInfoPay();
+    console.log(
+      "ok",
+      location.state.idOrder,
+      product_id,
+      idUser,
+      productItem?.length,
+      location.state.totalPrice
+    );
+    const res = await postOrder(
+      location.state.idOrder,
+      product_id,
+      idUser,
+      productItem?.length,
+      location.state.totalPrice
+    );
+    console.log(res);
+  };
   const ulStyle = {
     listStyle: "none",
     height: "560px",
-    overflowY: "scroll",
   };
   return (
     <div className="container pay mt-3 ">
       <div className="pay__container row">
-        <h5 className="back-to-cart fs-5">
-          <IoChevronBackOutline />
-          Back to cart
-        </h5>
-        <div className="pay__product col-6 bg-secondary text-white">
+        <Link to={`/cart`} state={{ UserID: idUser }}>
+          <h5 className="back-to-cart fs-5">
+            <IoChevronBackOutline />
+            Back to cart
+          </h5>
+        </Link>
+        <div className="pay__product col-12 col-md-12 col-lg-6 bg-secondary text-white">
           <div className="pay__product-back"></div>
           <div className="pay__product-title">
             <h5 className="title mt-1">
@@ -53,12 +88,18 @@ const Pay = () => {
             </h5>
             <hr />
           </div>
-          <ul className="pay__product-item p-0 lis" style={ulStyle}>
-            {productItem && id ? (
+          <ul
+            className="pay__product-item p-0 lis"
+            style={{
+              ...ulStyle,
+              overflowY: productItem?.length >= 3 ? "scroll" : "visible",
+            }}
+          >
+            {productItem && idUser ? (
               productItem.map((items, index) => (
                 <li className="pay__product-items mb-2" key={index}>
                   <ProductCard
-                    productCart={id ? items : product}
+                    productCart={idUser ? items : product}
                     mainclassName="row"
                     imageclassName="col-4"
                     detailclassName="col-8"
@@ -68,20 +109,22 @@ const Pay = () => {
                 </li>
               ))
             ) : (
-              <li className="pay__product-items mb-2" key={product.ProductID}>
-                <ProductCard
-                  productCart={product}
-                  mainclassName="row"
-                  imageclassName="col-4"
-                  detailclassName="col-8"
-                  sizeImg="500"
-                  Linkto="/products/detail"
-                />
+              <li className="pay__product-items mb-2" key={product?.ProductID}>
+                {product && (
+                  <ProductCard
+                    productCart={product}
+                    mainclassName="row"
+                    imageclassName="col-4"
+                    detailclassName="col-8"
+                    sizeImg="500"
+                    Linkto="/products/detail"
+                  />
+                )}
               </li>
             )}
           </ul>
         </div>
-        <div className="pay__info col-6 " style={{ paddingLeft: "60px" }}>
+        <div className="pay__info col-12 col-md-12 col-lg-6 ">
           <div className="pay__product-back pay__info-detail">
             <h5 className="back-to-cart my-2 text-center fs-2">
               Payment details
@@ -91,7 +134,10 @@ const Pay = () => {
             <FormPay price={product?.ProductID} />
           </div>
           <div className="pay__product-check-out  ">
-            <button className="btn btn-dark w-100 ">
+            <button
+              className="btn btn-dark w-100 "
+              onClick={handleSubmitInfoPay}
+            >
               Pay ${totalPrice ? totalPrice : product?.ProductPrice || NaN}
             </button>
           </div>

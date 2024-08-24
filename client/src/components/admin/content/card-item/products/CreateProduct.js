@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { getAllCategories } from "../../../../../services/apiServerviceCategorie";
@@ -46,6 +46,9 @@ const CreateProduct = ({ show, handleClose }) => {
 
   const handleSubmitCreateProduct = async (e) => {
     e.preventDefault();
+    if (ProductCategoryID.length <= 0) {
+      return toast.info("Please choose category !");
+    }
     try {
       const res = await postCreateProduct(
         ProductName,
@@ -78,13 +81,16 @@ const CreateProduct = ({ show, handleClose }) => {
     }
   };
   const handleCategoryChange = (event) => {
+    if (event.target.value === "") {
+      toast.info("Please choose category !");
+    }
     setProductCategoryID(event.target.value);
   };
 
   return (
     <Modal show={show} onHide={handleClose} size="xl">
       <Modal.Header closeButton>
-        <Modal.Title>Modal confirm ?</Modal.Title>
+        <Modal.Title>Modal create</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <section className="h-100 ">
@@ -98,7 +104,9 @@ const CreateProduct = ({ show, handleClose }) => {
                         <div className="card-body  text-black">
                           <div className="row">
                             <CreateCategoryForm
+                              showBtn={true}
                               onCategoryCreated={handleCategoryCreated}
+                              CategoryNameID={"Category Name"}
                             />
                             <div
                               data-mdb-input-init
@@ -113,17 +121,26 @@ const CreateProduct = ({ show, handleClose }) => {
                               </label>
 
                               <select
+                                style={
+                                  ProductCategoryID.length > 0
+                                    ? { fontWeight: "600" }
+                                    : { border: "2px solid red" }
+                                }
                                 name="ProductCategoryID"
                                 value={ProductCategoryID}
                                 onChange={handleCategoryChange} // Added onChange handler
                               >
+                                <option value="" label="categorys"></option>
                                 {categories.map((category) => (
-                                  <option
-                                    key={category.CategoryID}
-                                    value={category.CategoryID}
-                                  >
-                                    {category.CategoryName}
-                                  </option>
+                                  <>
+                                    <option
+                                      key={category.CategoryID}
+                                      value={category.CategoryID}
+                                      style={{ fontWeight: "700" }}
+                                    >
+                                      {category.CategoryName}
+                                    </option>
+                                  </>
                                 ))}
                               </select>
                             </div>

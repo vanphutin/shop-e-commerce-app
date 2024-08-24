@@ -1,0 +1,106 @@
+@import "../../../../assets/styles/utils/variables";
+.card {
+  border-radius: 0px;
+  .card-product {
+    margin: 0;
+    padding: 10px;
+    .card-product__image {
+      cursor: pointer;
+      // width: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -moz-user-select: none !important;
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .card-product__main {
+      .card-product__detail {
+        font-family: "Poppins", sans-serif;
+
+        .detail-name {
+          font-weight: 500;
+          font-size: $font-size-title;
+          font-size: 1.2rem;
+          margin-bottom: $margin-bottom !important;
+        }
+
+        .detail-price {
+          margin-bottom: $margin-bottom;
+          .price-old {
+            text-decoration: line-through;
+            font-size: 15px;
+            color: #ccc;
+            font-style: italic;
+          }
+
+          .price-new {
+            font-size: 1.3rem;
+            color: #000000;
+            font-weight: 500;
+          }
+        }
+        .detail-descript {
+          margin-bottom: $margin-bottom;
+          font-size: 16px;
+          color: #737373;
+          // height: 48px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2; // Số dòng giới hạn
+          -webkit-box-orient: vertical;
+        }
+
+        .detail-action {
+          margin-bottom: $margin-bottom;
+          .action-add-card {
+          }
+          .action-favourite,
+          .action-view {
+            border: none;
+            margin-left: 15px;
+            padding: 7px 15px;
+            border-radius: 8px;
+          }
+          .action-favourite {
+            &.isActive {
+              color: red;
+            }
+            &.none {
+              display: none;
+            }
+          }
+        }
+      }
+      .card-product__date {
+        display: flex;
+        align-items: center;
+        .detail-time {
+          margin-right: 20px;
+          p {
+            margin: 0;
+          }
+          .time {
+            text-align: center;
+            font-weight: 600;
+          }
+
+          .title {
+            font-size: 0.9em;
+            color: #737373;
+          }
+        }
+      }
+    }
+  }
+}

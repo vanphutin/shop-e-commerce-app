@@ -1,0 +1,25 @@
+.favourite {
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .favourite__item {
+    ul {
+      li {
+        list-style: none;
+        .card {
+          .card-product__image {
+            min-height: 255px;
+          }
+          .detail-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; // Số dòng giới hạn
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+  }
+}

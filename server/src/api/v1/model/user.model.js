@@ -46,6 +46,43 @@ const Users = {
       throw error;
     }
   },
+  getUser: async (UserID) => {
+    const sql_getUser = "SELECT * FROM users WHERE UserID = ?";
+    try {
+      const result = query(sql_getUser, [UserID]);
+      return result;
+    } catch (error) {
+      console.log("Error executing query:", error);
+      throw error;
+    }
+  },
+  updateUsers: async (
+    userID,
+    firstname,
+    lastname,
+    avatar,
+    city,
+    country, // Fixed typo 'coutry' to 'country'
+    gender
+  ) => {
+    const sql_updateuser =
+      "UPDATE users SET UserFirstName = ?, UserLastName = ?, UserCity = ?, UserCountry = ?, UserAvatar = ?, Gender = ? WHERE UserID = ?"; // Removed extra comma before 'WHERE'
+    try {
+      const result = await query(sql_updateuser, [
+        firstname,
+        lastname,
+        city,
+        country, // Fixed typo 'coutry' to 'country'
+        avatar,
+        gender,
+        userID,
+      ]);
+      return result;
+    } catch (error) {
+      console.log("Error executing query:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = Users;

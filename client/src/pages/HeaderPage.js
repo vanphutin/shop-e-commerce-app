@@ -7,6 +7,7 @@ import { AuthContext } from "../context/AuthProvider";
 import { toast } from "react-toastify";
 import { FaCartPlus, FaHeart } from "react-icons/fa";
 import { getSearchProduct } from "../services/apiServerviceProduct";
+import HOST_IMG from "../components/common/HostImg";
 
 const HeaderPage = () => {
   const { user } = useContext(AuthContext);
@@ -103,12 +104,7 @@ const HeaderPage = () => {
                     <FaHeart fontSize="25px" />
                   </Link>
                 </p>
-                <p
-                  onClick={() => {
-                    console.log("ok");
-                  }}
-                  className="me-4 p-0 mb-0"
-                >
+                <p onClick={() => {}} className="me-4 p-0 mb-0">
                   <Link to="/cart" state={{ id: user.id }}>
                     <FaCartPlus fontSize="25px" />
                   </Link>
@@ -125,7 +121,7 @@ const HeaderPage = () => {
                       src={
                         user?.avatar === "no image"
                           ? "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
-                          : `data:image/jpeg;base64,${user?.avatar}`
+                          : `${HOST_IMG}/${user?.avatar}`
                       }
                       alt="User avatar"
                       width="32"
@@ -154,8 +150,13 @@ const HeaderPage = () => {
                     </li>
                     <li>
                       <a className="dropdown-item" href="#">
-                        Profile
+                        Wallet
                       </a>
+                    </li>
+                    <li>
+                      <Link to="/profile" className="dropdown-item">
+                        Profile
+                      </Link>
                     </li>
                     <li>
                       <hr className="dropdown-divider" />

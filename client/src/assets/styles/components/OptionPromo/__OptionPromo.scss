@@ -1,5 +1,7 @@
 @import "../../utils/mixins";
+@import "../../utils/variables";
 .option-promo {
+  margin-bottom: $margin-bottom-component;
   .option-promo__items {
     margin: 0;
     padding: 0;
@@ -50,7 +52,7 @@
 }
 
 .promo-popular {
-  margin: 30px 0;
+  margin-bottom: $margin-bottom;
   @include flex-center;
   gap: 20px;
 

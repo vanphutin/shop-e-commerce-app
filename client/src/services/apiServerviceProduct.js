@@ -96,8 +96,18 @@ const updateProduct = (
   });
 };
 
+const getSearchProduct = (keyword) => {
+  let url = "/product/search?";
+
+  if (keyword) {
+    url += `keyword=${keyword}`;
+  }
+  return axios.get(url);
+};
+
 export { getAllProducts };
 export { postCreateProduct };
 export { getDetailProduct };
 export { deleteProduct };
 export { updateProduct };
+export { getSearchProduct };

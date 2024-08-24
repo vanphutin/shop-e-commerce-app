@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthProvider";
 import { postAddCart } from "../../../services/apiServerviceCart";
 import { postFavouriteProducts } from "../../../services/apiServerviceHeart";
+import HOST_IMG from "../../common/HostImg";
+import { Tooltip } from "react-tooltip";
 
 const ProductCard = ({
   productCart,
@@ -19,6 +21,8 @@ const ProductCard = ({
   imageclassName,
   detailclassName,
   showDate,
+  sizeImg,
+  heightSize,
   showButton,
   Linkto,
   endDate, // Added endDate prop
@@ -117,9 +121,11 @@ const ProductCard = ({
         <div className={`card-product__image ${imageclassName}`}>
           <Link to={`${Linkto}/${ProductID}`}>
             <img
-              src={`data:image/gif;base64,${ProductImage}`}
+              src={`${HOST_IMG}/${ProductImage}`}
               alt={ProductName}
               className="image-product"
+              width={sizeImg}
+              height={heightSize}
             />
           </Link>
         </div>
@@ -133,10 +139,15 @@ const ProductCard = ({
               <div className="price-new">${ProductPrice}</div>
             </div>
 
-            <p className="detail-descript">
+            <p
+              className="detail-descript"
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={ProductLongDesc}
+              data-tooltip-place="bottom"
+            >
               {ProductLongDesc ? `${ProductLongDesc}` : ""}
             </p>
-
+            <Tooltip id="my-tooltip" style={{ width: "400px" }} />
             {showButton && (
               <div className="detail-action">
                 <button
@@ -146,11 +157,13 @@ const ProductCard = ({
                   {AddIcon ? <AddIcon /> : "Add To Cart"}
                 </button>
                 <button
-                  className="action-favourite "
+                  className={`action-favourite ${
+                    productCart.isFavourited === 0 ? "isActive" : ""
+                  }`}
                   data-id={ProductID}
                   onClick={() => handleFavourite(ProductID)}
                 >
-                  {FavoriteIcon ? <FavoriteIcon /> : <FaHeart />}
+                  <FaHeart />
                 </button>
                 <button className="action-view">
                   <Link to={`${Linkto}/${ProductID}`}>
@@ -204,6 +217,8 @@ ProductCard.propTypes = {
   Linkto: PropTypes.string,
   showDate: PropTypes.bool,
   showButton: PropTypes.bool,
+  sizeImg: PropTypes.number,
+  heightSize: PropTypes.number,
   endDate: PropTypes.string, // Added prop type for endDate
 };
 

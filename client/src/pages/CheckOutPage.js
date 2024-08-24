@@ -1,7 +1,7 @@
 import React from "react";
 import Pay from "../components/check-out/Pay";
 
-const CheckOut = () => {
+const CheckOutPage = () => {
   return (
     <div>
       <Pay />
@@ -9,4 +9,4 @@ const CheckOut = () => {
   );
 };
 
-export default CheckOut;
+export default CheckOutPage;

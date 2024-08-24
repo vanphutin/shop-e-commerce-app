@@ -16,7 +16,7 @@ const formatShopData = (shopProduct) => {
     ProductID: item.ProductID,
     ProductName: item.ProductName || "N/A",
     ProductPrice: item.ProductPrice || 0,
-    ProductImage: `http://localhost:8081/${item.ProductImage}`,
+    ProductImage: item.ProductImage,
     ProductLongDesc: item.ProductLongDesc || "No description",
     ProductStock: item.ProductStock || 0,
   }));

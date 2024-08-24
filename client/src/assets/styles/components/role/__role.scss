@@ -1,0 +1,49 @@
+@import "../../utils/variables";
+.seller {
+  background-color: rgb(230, 230, 250);
+
+  margin-bottom: $margin-bottom-component;
+  .seller-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .seller-main_title {
+      margin-left: 30px;
+      font-family: "Poppins", sans-serif;
+      word-spacing: 2px;
+
+      .seller-main_title-header {
+        font-family: "DM Serif Display", serif;
+        font-weight: 600;
+        font-size: 1.7rem;
+        margin-bottom: 1.4rem;
+        word-spacing: 5px;
+      }
+
+      .seller-main_title-body {
+        font-size: 1.1rem;
+        word-spacing: normal;
+        margin-bottom: 1.4rem;
+        color: rgba(84, 84, 84, 0.753);
+      }
+      .seller-main_title-footer {
+        .btn-register {
+          border: 2px solid #000000c8;
+          padding: 10px 15px;
+          font-weight: 600;
+          border-radius: 0;
+
+          .btn-register__icon {
+            color: #000;
+          }
+          &:hover {
+            color: rgba(14, 53, 111, 0.815);
+            letter-spacing: 0.4px;
+            transition: 0.3s ease-in-out;
+          }
+        }
+      }
+    }
+  }
+}

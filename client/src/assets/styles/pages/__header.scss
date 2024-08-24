@@ -1,13 +1,33 @@
 @import "../utils/mixins";
+@import url("https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 header {
-  background-color: rgb(205, 205, 205);
+  background-color: rgba(91, 194, 54, 0.459);
   @include flex-center;
   nav {
     align-items: center;
     padding: 5px 3px;
 
     .nav-icon__logo {
-      @include flex-center;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      a {
+        text-decoration: none;
+      }
+
+      p {
+        // margin-left: 15px;
+        margin-bottom: 0;
+        cursor: pointer;
+        font-size: 1.3rem;
+        text-align: start;
+        color: #3471c0;
+        font-family: "Bona Nova SC", serif;
+        // font-weight: 400;
+        font-style: normal;
+        font-weight: 800;
+      }
     }
 
     .nav-icon__logo,
@@ -19,6 +39,7 @@ header {
       @include flex-center;
       margin: 0;
       padding: 0;
+      font-family: "Fira Sans Condensed", sans-serif;
       li {
         list-style: none;
 
@@ -38,15 +59,24 @@ header {
 
     .nav-search {
       input {
-        padding: 2px 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
+        // width: 90%;
+        padding: 4px 9px;
+        // border-radius: 9px;
+        border: 1px solid #6b6b6b;
+        background-color: #fff;
+
+        &:focus {
+          outline: none;
+        }
       }
       .nav-search__icon-search {
-        padding: 3px 5px;
+        border: 1px solid #646464;
+        padding: 1px 3px 5px;
         font-size: 1.3rem;
+        // border-radius: 9px;
         cursor: pointer;
         margin-left: 5px;
+        // background-color: #ccc;
       }
     }
 
@@ -59,7 +89,7 @@ header {
 
   @media (max-width: 768px) {
     nav {
-      background-color: #e2e2e2;
+      background-color: rgba(91, 194, 54, 0.222);
       backdrop-filter: blur(10px);
       transition: 1s ease-in-out;
 
@@ -89,7 +119,16 @@ header {
         }
       }
       .nav-auth {
+        z-index: 99999999;
         margin-top: 20px;
+        .dropdown {
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+          .dropdown-menu {
+            bottom: 0 !important;
+          }
+        }
       }
 
       .show-phone {

@@ -2,14 +2,15 @@ const User = require("../model/user.model");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
+const Users = require("../model/user.model");
 
 module.exports.registerSeller = async (req, res) => {
   try {
     const { id, UserFirstName, UserLastName, UserCity, UserCountry } = req.body;
-    let UserAvatar = null;
     const Role = "seller";
 
     // If a file is uploaded
+    let UserAvatar = null;
     if (req.file) {
       UserAvatar = req.file.path.replace(/\\/g, "/"); // Lưu đường dẫn ảnh
     }
@@ -153,6 +154,59 @@ module.exports.getUser = async (req, res) => {
         role: user.role,
         birthday: user.birthday,
       },
+    });
+  } catch (error) {
+    console.log("Error executing query:", error);
+    res.status(500).json({
+      code: 500,
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports.updateUsers = async (req, res) => {
+  const { firstname, lastname, city, country, gender, userID } = req.body; // Fixed typo 'coutry' to 'country'
+  let avatar = null;
+
+  if (req.file) {
+    avatar = req.file.path.replace(/\\/g, "/"); // Normalize the file path
+  }
+
+  const missingFields = [];
+
+  if (!userID) missingFields.push("userID");
+  if (!firstname) missingFields.push("firstname");
+  if (!lastname) missingFields.push("lastname");
+  if (!city) missingFields.push("city");
+  if (!country) missingFields.push("country");
+  if (!gender) missingFields.push("gender");
+
+  if (missingFields.length > 0) {
+    return res.status(400).json({
+      code: 400,
+      message: `Missing required fields: ${missingFields.join(", ")}`,
+    });
+  }
+
+  try {
+    const update = await Users.updateUsers(
+      userID,
+      firstname,
+      lastname,
+      avatar,
+      city,
+      country, // Fixed typo 'coutry' to 'country'
+      gender
+    );
+    if (!update) {
+      return res.status(400).json({
+        code: 400,
+        message: "Error updating user",
+      });
+    }
+    return res.status(200).json({
+      code: 200,
+      message: "Update user successful",
     });
   } catch (error) {
     console.log("Error executing query:", error);

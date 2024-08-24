@@ -8,6 +8,8 @@ import "../../../assets/styles/components/products/product-detail/__ProductDetai
 import { AuthContext } from "../../../context/AuthProvider";
 import { getDetailCategories } from "../../../services/apiServerviceCategorie";
 import { postAddCart } from "../../../services/apiServerviceCart";
+import { v4 as uuidv4 } from "uuid";
+import HOST_IMG from "../../common/HostImg";
 
 const ProductDetail = () => {
   const { user } = useContext(AuthContext);
@@ -75,7 +77,7 @@ const ProductDetail = () => {
     return (total + total * VAT).toFixed(3);
   };
 
-  //handle submit form
+  //fetch api add cart
   const FetchAddToCart = async () => {
     try {
       if (user && TOKEN) {
@@ -95,7 +97,7 @@ const ProductDetail = () => {
           <div className="detail-page-main main-address  col-12 col-sm-12 col-lg-6 col-xl-4">
             <div className="main-address__image">
               <img
-                src={`data:image/jpeg;base64,${product.ProductImage} `}
+                src={`${HOST_IMG}/${product.ProductImage} `}
                 alt={product.ProductName}
                 className="image"
               />
@@ -106,9 +108,11 @@ const ProductDetail = () => {
                   <CiShop size="1.5rem" />
                   <Link to="#"> {product.UserName}</Link>
                 </span>
-                <button type="button" className="btn btn-outline-info">
-                  Visit Store
-                </button>
+                <Link to={`/shop/detail/${product.UserID}`}>
+                  <button type="button" className="btn btn-outline-info">
+                    Visit Store
+                  </button>
+                </Link>
               </div>
               <div className="main-address__addr-usercity ">
                 <span className="__icon">
@@ -177,6 +181,7 @@ const ProductDetail = () => {
                     name=""
                     id=""
                     value={quantity}
+                    disabled={quantity <= 1}
                     readOnly
                     className="main-order__quantily count"
                   />
@@ -215,11 +220,19 @@ const ProductDetail = () => {
                 <span className="text-title">${subTotal()}</span>
               </div>
               <div className="d-grid gap-2 main-order__button">
-                <button className="main-order__buy-now btn btn-primary">
-                  Buy Now
-                </button>
+                <Link
+                  to={`/check-out/${uuidv4()}`}
+                  state={{ product: product }}
+                >
+                  <button
+                    className="main-order__buy-now btn btn-primary w-100"
+                    onClick={FetchAddToCart}
+                  >
+                    Buy Now
+                  </button>
+                </Link>
                 <button
-                  className="main-order__add-cart btn btn-outline-primary"
+                  className="main-order__add-cart btn btn-outline-dark"
                   onClick={FetchAddToCart}
                 >
                   Add to cart

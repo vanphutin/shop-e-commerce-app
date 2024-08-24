@@ -1,0 +1,57 @@
+@import "../../utils/variables";
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
+.featured-categories {
+  margin-bottom: $margin-bottom-component;
+
+  .main-card__title {
+    text-align: center;
+    a {
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  }
+  .featured-categories__header {
+    background: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .header-title {
+      text-align: left !important;
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: "DM Serif Display", serif;
+      font-style: normal;
+      width: 22pc;
+    }
+    &::after {
+      content: "";
+      width: 100%;
+      flex-grow: 1;
+      height: 1px;
+      margin-left: 10px; /* Adjust the space between the text and the line */
+      background-color: #c2c2c251;
+    }
+  }
+  .featured-categories__main {
+    margin-top: 10px;
+    // margin: 15px 0;
+    padding: 0;
+  }
+  .main-card {
+    margin: 0;
+    .main-card__title {
+      .title {
+        cursor: pointer;
+        border: 1px solid #dfdfdf3b;
+
+        &:hover {
+          box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+            rgba(17, 17, 26, 0.05) 0px 8px 32px;
+          border: none;
+          font-weight: 700;
+          transition: 0.2s ease-in-out;
+        }
+      }
+    }
+  }
+}

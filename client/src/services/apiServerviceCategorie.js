@@ -5,6 +5,10 @@ const getAllCategories = () => {
   return axios.get("/category");
 };
 
+const getDetailCategories = (id) => {
+  return axios.get(`/category/detail/${id}`);
+};
+
 const createCategory = (category) => {
   return axios.post("/category", category).catch(function (error) {
     console.error(
@@ -17,3 +21,4 @@ const createCategory = (category) => {
 
 export { getAllCategories };
 export { createCategory };
+export { getDetailCategories };

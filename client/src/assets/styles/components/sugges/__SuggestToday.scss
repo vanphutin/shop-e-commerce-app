@@ -1,0 +1,70 @@
+@import "../../utils/variables";
+.suggest-today {
+  margin-bottom: $margin-bottom-component;
+  .suggest-today__header {
+    margin-top: 40px;
+    .header-title {
+      font-size: 1.7rem;
+      font-weight: 600;
+      text-align: left !important;
+    }
+  }
+  .featured-categories__header {
+    background: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .header-title {
+      text-align: left !important;
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: "DM Serif Display", serif;
+      font-style: normal;
+      width: 15pc;
+    }
+    &::after {
+      content: "";
+      width: 100%;
+      flex-grow: 1;
+      height: 1px;
+      margin-left: 10px; /* Adjust the space between the text and the line */
+      background-color: #c2c2c251;
+    }
+  }
+  .suggest-today__main {
+    .main-items {
+      .card {
+        .card-product {
+          .card-product__image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            img {
+              height: 200px;
+              object-fit: contain;
+
+              &:hover {
+                transform: translateY(-10px);
+                transition: 0.3s all ease-in-out;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .card-product__image {
+    width: 255px;
+    height: 255px;
+  }
+  .detail-name {
+    height: 58px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // Số dòng giới hạn
+    -webkit-box-orient: vertical;
+  }
+}

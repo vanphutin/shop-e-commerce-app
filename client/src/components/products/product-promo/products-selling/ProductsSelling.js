@@ -1,48 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import headphone from "../../../../assets/images/product-promo/headphone.webp";
-import ProductCart from "../../product-card/ProductCart";
+import ProductCard from "../../product-card/ProductCard";
+import { getAllProducts } from "../../../../services/apiServerviceProduct";
+import "../../../../assets/styles/components/OptionPromo/__ProductsSelling.scss";
 const ProductsSelling = () => {
-  let products = [
-    {
-      id: 1,
-      name: "Leather Wallet",
-      image: headphone,
-      oldPrice: 49.99,
-      newPrice: 39.99,
-    },
-    {
-      id: 2,
-      name: "Wireless Headphones",
-      image: headphone,
-      oldPrice: 129.95,
-      newPrice: 99.95,
-    },
-    {
-      id: 3,
-      name: "4K Smart TV",
-      image: headphone,
-      oldPrice: 299.0,
-      newPrice: 249.0,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    getProduct();
+  }, []);
+  const getProduct = async () => {
+    try {
+      const res = await getAllProducts();
+      if (res.code !== 200) {
+      }
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className="col-12 col-md-4">
+    <div className="selling col-12 col-md-4">
       <div className="deal-card__header ">
-        <div className="header-title text-center">
-          DEAL OF THE DAYS PRODUCTS
+        <div
+          className="header-title text-center"
+          style={{
+            fontSize: "1.3rem",
+            fontWeight: "600",
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          SELLING EVYDAYS
         </div>
       </div>
       {products &&
         products
-          .slice(0, 2)
-          .map((product) => (
-            <ProductCart
-              key={product.id}
+          .slice(3, 5)
+          .map((product, index) => (
+            <ProductCard
+              key={`${product.id}-${index}`}
               productCart={product}
-              mainClass="row"
-              imageClass="col-4"
-              detailClass="col-8"
+              mainclassName="row"
+              imageclassName="col-4"
+              detailclassName="col-8"
               showDate={false}
+              Linkto="products/detail"
             />
           ))}
     </div>

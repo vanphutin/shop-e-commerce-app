@@ -161,7 +161,7 @@ module.exports.authVeryToken = async (req, res) => {
       SELECT p.*, c.CategoryName
       FROM products p
       JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
-      WHERE p.UserID = ?
+      WHERE p.UserID = ?  AND p.Deleted = 0
     `,
         [loginAuth.UserID]
       );

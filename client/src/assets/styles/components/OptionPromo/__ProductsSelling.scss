@@ -1,0 +1,21 @@
+.selling {
+  .card {
+    .card-product {
+      .card-product__main {
+        .card-product__detail {
+          .detail-name {
+            // margin-bottom: 0;
+            font-size: 1rem;
+          }
+          .detail-price {
+            margin-bottom: 0;
+          }
+          .detail-descript {
+            margin-bottom: 0;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,23 +1,34 @@
 // Cart.js
-
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import "../../../assets/styles/components/products/product-cart/__cart.scss";
 import { TbLock } from "react-icons/tb";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   deleteCartItem,
   getCartItems,
 } from "../../../services/apiServerviceCart";
 import { toast } from "react-toastify";
+import HOST_IMG from "../../common/HostImg";
+import { AuthContext } from "../../../context/AuthProvider";
 
 const ProductCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const location = useLocation();
   const { id } = location.state || {};
+  const idOrder = uuidv4();
+  const { UserID } = location.state || {};
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchCartItems(id);
-  }, []);
+    if (id) {
+      fetchCartItems(id);
+    }
+    if (UserID) {
+      fetchCartItems(UserID);
+    }
+    fetchCartItems(user.id);
+  }, [id, UserID, user.id]);
 
   const fetchCartItems = async (id) => {
     try {
@@ -69,7 +80,7 @@ const ProductCart = () => {
               >
                 <div className="cart__item-image col-2">
                   <img
-                    src={` data:image/jpeg;base64,${item.ProductImage}`}
+                    src={`${HOST_IMG}/${item.ProductImage}`}
                     alt={item.name}
                     className="img-fluid"
                   />
@@ -122,9 +133,18 @@ const ProductCart = () => {
                 $ <span>{totalPrice}</span>
               </p>
             </h6>
-            <button className="btn btn-dark">
-              CHECK OUT <TbLock />
-            </button>
+            <Link
+              to={`/check-out/${idOrder}`}
+              state={{
+                idOrder: idOrder,
+                idUser: user?.id,
+                totalPrice: totalPrice,
+              }}
+            >
+              <button className="btn btn-dark">
+                CHECK OUT <TbLock />
+              </button>
+            </Link>
           </div>
         </div>
       )}
