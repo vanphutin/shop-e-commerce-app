@@ -9,7 +9,7 @@ const ShopPage = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (user.id) {
+    if (user?.id) {
       fetchUsers(user.id);
     } else {
       fetchUsers();
