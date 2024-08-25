@@ -195,10 +195,7 @@ const RegisterPage = () => {
                       <div className="row">
                         <div className="col-md-6 mb-4">
                           <div data-mdb-input-init className="form-outline">
-                            <label
-                              className="form-label"
-                              htmlFor="form3Example1m"
-                            >
+                            <label className="form-label" htmlFor="firsttname">
                               First name
                             </label>
                             <input
@@ -214,10 +211,7 @@ const RegisterPage = () => {
                         <div className="col-md-6 mb-4">
                           <div data-mdb-input-init className="form-outline">
                             {" "}
-                            <label
-                              className="form-label"
-                              htmlFor="form3Example1n"
-                            >
+                            <label className="form-label" htmlFor="lastname">
                               Last name
                             </label>
                             <input

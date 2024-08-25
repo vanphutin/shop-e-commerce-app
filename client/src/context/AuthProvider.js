@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const res = await fetch(
-            "http://localhost:8081/api/v1/auth/verifyToken",
+            "https://shop-e-commerce-app.onrender.com/api/v1/auth/verifyToken",
             {
               method: "POST",
               headers: {
