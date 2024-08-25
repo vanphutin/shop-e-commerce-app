@@ -20,7 +20,7 @@ const LoginPage = () => {
 
   const handleSubmitForm = async (event) => {
     event.preventDefault();
-    setLoading(false);
+    setLoading(true);
 
     try {
       //check validate login
@@ -30,7 +30,7 @@ const LoginPage = () => {
       const res = await postLogin(UserEmail, UserPassword);
       if (res.code === 200) {
         toast.success("Login success");
-        setLoading(true);
+        setLoading(false);
         navigator("/");
       }
       // console.log("user", res);
@@ -108,22 +108,12 @@ const LoginPage = () => {
               type="submit"
               disabled={loading}
             >
-              {loading === true && <CgSpinnerTwo className="loader-icon" />}
-              <span>Login</span>
+              {loading ? (
+                <CgSpinnerTwo className="loader-icon" />
+              ) : (
+                <span>Login</span>
+              )}
             </button>
-
-            {/* {!loading ? (
-              <button
-                type="submit"
-                data-mdb-button-init
-                data-mdb-ripple-init
-                className="btn btn-primary btn-block mb-4 btn-login "
-              >
-                Sign in
-              </button>
-            ) : (
-              <p>Loading</p>
-            )} */}
 
             <div className="text-center">
               <p>or sign up with:</p>
