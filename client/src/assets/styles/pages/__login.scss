@@ -32,6 +32,28 @@
     position: relative;
     @include flex-center;
     form {
+      .loader-icon {
+        margin-right: 7px;
+        top: 2px;
+        animation: spin 1s infinite linear;
+        z-index: 100 !important;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: scale(1) rotate(0deg);
+          color: #00ffd5;
+        }
+        50% {
+          transform: scale(1) rotate(-180deg);
+          color: #48ff00;
+        }
+        100% {
+          transform: scale(1) rotate(360deg);
+          color: pink;
+        }
+      }
+
       width: 60%;
       position: absolute;
       top: 50%;

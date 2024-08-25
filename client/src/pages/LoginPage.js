@@ -9,6 +9,7 @@ import { MdArrowBackIos } from "react-icons/md";
 import { toast } from "react-toastify";
 import { postLogin } from "../services/apiservices";
 import { AuthContext } from "../context/AuthProvider";
+import { CgSpinnerTwo } from "react-icons/cg";
 
 const LoginPage = () => {
   const { setUser } = useContext(AuthContext);
@@ -19,8 +20,13 @@ const LoginPage = () => {
 
   const handleSubmitForm = async (event) => {
     event.preventDefault();
+    setLoading(false);
 
     try {
+      //check validate login
+      if (UserEmail.length <= 0 || UserPassword.length <= 0) {
+        return toast.error("Email or Password is not valid");
+      }
       const res = await postLogin(UserEmail, UserPassword);
       if (res.code === 200) {
         toast.success("Login success");
@@ -95,7 +101,18 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {!loading ? (
+            <button
+              data-mdb-button-init
+              data-mdb-ripple-init
+              className="btn btn-primary btn-block mb-4 btn-login "
+              type="submit"
+              disabled={loading}
+            >
+              {loading === true && <CgSpinnerTwo className="loader-icon" />}
+              <span>Login</span>
+            </button>
+
+            {/* {!loading ? (
               <button
                 type="submit"
                 data-mdb-button-init
@@ -106,7 +123,7 @@ const LoginPage = () => {
               </button>
             ) : (
               <p>Loading</p>
-            )}
+            )} */}
 
             <div className="text-center">
               <p>or sign up with:</p>
