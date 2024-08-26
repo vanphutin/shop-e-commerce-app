@@ -10,6 +10,7 @@ import { getDetailCategories } from "../../../services/apiServerviceCategorie";
 import { postAddCart } from "../../../services/apiServerviceCart";
 import { v4 as uuidv4 } from "uuid";
 import HOST_IMG from "../../common/HostImg";
+import { Box, CircularProgress } from "@mui/material";
 
 const ProductDetail = () => {
   const { user } = useContext(AuthContext);
@@ -23,6 +24,7 @@ const ProductDetail = () => {
   const [quantity, setQuantily] = useState(1);
   const [category, setCategory] = useState("");
   const [notes, setNotes] = useState("null");
+  const [loading, setLoading] = useState(false);
 
   //Call APIs
   useEffect(() => {
@@ -34,10 +36,20 @@ const ProductDetail = () => {
 
   // API get detail product
   const fetchProductDetail = async (id) => {
+    setLoading(true);
     const res = await getDetailProduct(id);
-    res.data === 200
-      ? toast.error("Error when handle product !")
-      : setProduct(res.data);
+
+    try {
+      if (res.code !== 200) {
+        setLoading(false);
+        return toast.error("Error when handle product !");
+      }
+      setProduct(res.data);
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   // API convert categoryID to categoryName
@@ -92,7 +104,7 @@ const ProductDetail = () => {
   };
   return (
     <div className="detail-page container-fluid">
-      {product ? (
+      {!loading ? (
         <div className="detail-page-main row">
           <div className="detail-page-main main-address  col-12 col-sm-12 col-lg-6 col-xl-4">
             <div className="main-address__image">
@@ -226,7 +238,7 @@ const ProductDetail = () => {
                 >
                   <button
                     className="main-order__buy-now btn btn-primary w-100"
-                    onClick={FetchAddToCart}
+                    // onClick={FetchAddToCart}
                   >
                     Buy Now
                   </button>
@@ -242,7 +254,19 @@ const ProductDetail = () => {
           </div>
         </div>
       ) : (
-        "NO DATA"
+        <p style={{ width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100vh", // Bạn có thể điều chỉnh chiều cao theo nhu cầu
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        </p>
       )}
     </div>
   );

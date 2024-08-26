@@ -11,6 +11,7 @@ const ProductDeal = () => {
 
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getProduct();
   }, []);
@@ -18,10 +19,13 @@ const ProductDeal = () => {
     try {
       const res = await getAllProducts();
       if (res.code !== 200) {
+        return setLoading(false);
       }
       setProducts(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Stop loading after data fetching is done
     }
   };
   const handleNext = () => {
@@ -58,21 +62,23 @@ const ProductDeal = () => {
           </span>
         </div>
       </div>
-      {products && products.length > 0 && (
-        <ProductCard
-          productCart={products[currentProductIndex]}
-          addIcon={FaCartPlus}
-          favoriteIcon={FaStar}
-          viewIcon={FaEye}
-          mainclassName="row"
-          imageclassName="col-4"
-          detailclassName="col-8"
-          showDate={true}
-          showButton={true}
-          endDate="2024-08-31T00:00:00"
-          Linkto="products/detail"
-        />
-      )}
+      <div className={` ${loading ? "main-items-loading" : ""}`}>
+        {products && products.length > 0 && (
+          <ProductCard
+            productCart={products[currentProductIndex]}
+            addIcon={FaCartPlus}
+            favoriteIcon={FaStar}
+            viewIcon={FaEye}
+            mainclassName="row"
+            imageclassName="col-4"
+            detailclassName="col-8"
+            showDate={true}
+            showButton={true}
+            endDate="2024-08-31T00:00:00"
+            Linkto="products/detail"
+          />
+        )}
+      </div>
     </div>
   );
 };

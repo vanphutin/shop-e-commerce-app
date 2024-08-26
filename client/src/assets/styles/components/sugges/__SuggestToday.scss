@@ -54,6 +54,69 @@
         }
       }
     }
+    .main-items-loading {
+      .card {
+        background: #f0f0f0;
+        position: relative;
+        overflow: hidden;
+        border: none;
+
+        .card-product {
+          .card-product__image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+
+            &::before {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: -150%;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(
+                to right,
+                transparent 0%,
+                #e0e0e0 50%,
+                transparent 100%
+              );
+              animation: shimmer 1.5s infinite;
+            }
+
+            img {
+              height: 200px;
+              object-fit: contain;
+              visibility: hidden; /* Hide image during loading */
+
+              &:hover {
+                transform: translateY(-10px);
+                transition: 0.3s all ease-in-out;
+              }
+            }
+          }
+
+          .card-product__detail {
+            .detail-price {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -150%;
+      }
+      50% {
+        left: 150%;
+      }
+      100% {
+        left: 150%;
+      }
+    }
   }
   .card-product__image {
     width: 255px;
