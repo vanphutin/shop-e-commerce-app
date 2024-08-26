@@ -25,6 +25,7 @@ const LoginPage = () => {
     try {
       //check validate login
       if (UserEmail.length <= 0 || UserPassword.length <= 0) {
+        setLoading(false);
         return toast.error("Email or Password is not valid");
       }
       const res = await postLogin(UserEmail, UserPassword);
@@ -109,7 +110,11 @@ const LoginPage = () => {
               disabled={loading}
             >
               {loading ? (
-                <CgSpinnerTwo className="loader-icon" />
+                <CgSpinnerTwo
+                  className="loader-icon"
+                  textAnchor="Loading..."
+                  title="Loading..."
+                />
               ) : (
                 <span>Login</span>
               )}
