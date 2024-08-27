@@ -29,7 +29,7 @@ module.exports.getAllProducts = async (req, res) => {
       data: newProducts,
     });
   } catch (error) {
-    console.log("Error executing query:", error);
+    "Error executing query:", error;
     res.status(500).json({
       code: 500,
       message: "Internal server error",
@@ -89,7 +89,7 @@ module.exports.createProducts = async (req, res) => {
       data: create,
     });
   } catch (error) {
-    console.log("Error executing query:", error);
+    "Error executing query:", error;
     res.status(500).json({
       code: 500,
       message: "Internal server error",
@@ -222,7 +222,7 @@ module.exports.updateProduct = async (req, res) => {
 
 module.exports.getSearchProducts = async (req, res) => {
   const { keyword } = req.query;
-  console.log("req", req.query);
+  "req", req.query;
 
   try {
     const search = await Products.getSearchProducts(keyword);

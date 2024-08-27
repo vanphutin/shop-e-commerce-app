@@ -2,7 +2,6 @@ import React from "react";
 import "../../../../../assets/styles/components/admin/content/__CardData.scss";
 
 const CardData = ({ data }) => {
-  console.log("data", data);
   return (
     <div className="card-dashboad ">
       <div className="card-dashboad__main boder row">

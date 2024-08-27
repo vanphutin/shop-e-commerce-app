@@ -22,10 +22,10 @@ const AuthProvider = ({ children }) => {
             }
           );
 
-          // console.log("res", res);
+          // ("res", res);
           if (res.ok) {
             const result = await res.json();
-            // console.log("API response:", result); // In ra phản hồi từ API để kiểm tra
+            // ("API response:", result); // In ra phản hồi từ API để kiểm tra
             if (result && result.user) {
               setUser(result.user);
             } else {

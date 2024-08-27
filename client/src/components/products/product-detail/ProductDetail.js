@@ -233,13 +233,10 @@ const ProductDetail = () => {
               </div>
               <div className="d-grid gap-2 main-order__button">
                 <Link
-                  to={`/check-out/${uuidv4()}`}
+                  to={user ? `/check-out/${uuidv4()} ` : "/login"}
                   state={{ product: product }}
                 >
-                  <button
-                    className="main-order__buy-now btn btn-primary w-100"
-                    // onClick={FetchAddToCart}
-                  >
+                  <button className="main-order__buy-now btn btn-primary w-100">
                     Buy Now
                   </button>
                 </Link>
@@ -261,7 +258,7 @@ const ProductDetail = () => {
               alignItems: "center",
               justifyContent: "center",
               width: "100%",
-              height: "100vh", // Bạn có thể điều chỉnh chiều cao theo nhu cầu
+              height: "100vh",
             }}
           >
             <CircularProgress />

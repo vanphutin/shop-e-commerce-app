@@ -41,13 +41,11 @@ database.getConnection((error, connection) => {
     console.error("Error connecting to database:", error);
     return;
   }
-  console.log(
-    "Connected to MySQL database",
-    `host: ${database.config.connectionConfig.host}, port: ${database.config.connectionConfig.port}`
-  );
+  "Connected to MySQL database",
+    `host: ${database.config.connectionConfig.host}, port: ${database.config.connectionConfig.port}`;
   connection.release();
   app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
+    `App listening on port ${port}`;
   });
 });
 

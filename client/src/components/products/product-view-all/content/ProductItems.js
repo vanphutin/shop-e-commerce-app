@@ -13,7 +13,6 @@ const ProductItems = () => {
   const [loading, setLoading] = useState(true); // To handle loading state
   const [error, setError] = useState(null); // To handle error state
   const location = useLocation();
-  const [page, setPage] = useState(1); // State for pagination
   const { search } = location.state || {}; // Lấy state hoặc giá trị mặc định là {}
   const { productSearch } = location.state || {}; // Lấy state hoặc giá trị mặc định là {}
 
@@ -21,7 +20,7 @@ const ProductItems = () => {
 
   useEffect(() => {
     getProduct();
-  }, [location.search, page]);
+  }, [location.search]);
 
   const getProduct = async () => {
     setLoading(true); // Start loading
@@ -35,7 +34,7 @@ const ProductItems = () => {
         categories.push(search);
       }
 
-      const res = await getAllProducts(sort, categories, page);
+      const res = await getAllProducts(sort, categories);
 
       if (res.code === 200) {
         // Adjust based on actual response object
@@ -70,9 +69,6 @@ const ProductItems = () => {
       </p>
     ); // Loading state
   if (error) return <p>{error}</p>; // Error state
-  const handleChange = (event, value) => {
-    setPage(value); // Update page state on pagination change
-  };
 
   return (
     <div className="product-items">
@@ -130,17 +126,6 @@ const ProductItems = () => {
           </p>
         )}
       </div>
-
-      {products.length > 0 && (
-        <Stack spacing={2}>
-          <Pagination
-            count={Math.ceil(products.length)} // Adjust the count based on total products
-            shape="rounded"
-            page={page}
-            onChange={handleChange}
-          />
-        </Stack>
-      )}
     </div>
   );
 };

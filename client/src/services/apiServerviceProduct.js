@@ -1,6 +1,6 @@
 import axios from "../utils/AxiosCustom";
 
-const getAllProducts = async (sort, categories, page) => {
+const getAllProducts = (sort, categories) => {
   let url = "/product?";
 
   if (sort) {
@@ -10,23 +10,21 @@ const getAllProducts = async (sort, categories, page) => {
   if (categories && categories.length > 0) {
     url += `categories=${categories.join(",")}&`;
   }
-  if (page) {
-    url += `page=${page}&`;
-  }
 
   // Xóa '&' cuối nếu cần thiết
   url = url.endsWith("&") ? url.slice(0, -1) : url;
 
-  try {
-    const response = await axios.get(url);
-    return response; // Trả về dữ liệu từ phản hồi
-  } catch (error) {
-    console.error(
-      "Error fetching products:",
-      error.response ? error.response.data : error.message
-    );
-    throw error; // Ném lỗi để người gọi xử lý
-  }
+  return axios.get(url);
+  // try {
+  //   const response = await axios.get(url);
+  //   return response; // Trả về dữ liệu từ phản hồi
+  // } catch (error) {
+  //   console.error(
+  //     "Error fetching products:",
+  //     error.response ? error.response.data : error.message
+  //   );
+  //   throw error; // Ném lỗi để người gọi xử lý
+  // }
 };
 
 const postCreateProduct = async (

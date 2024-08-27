@@ -27,7 +27,7 @@ const LoginPage = () => {
         setLoading(true);
         navigator("/");
       }
-      // console.log("user", res);
+      // ("user", res);
       localStorage.setItem("token", res.token);
       setUser(res.data);
     } catch (error) {
