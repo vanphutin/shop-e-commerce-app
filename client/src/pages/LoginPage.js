@@ -33,7 +33,7 @@ const LoginPage = () => {
         setLoading(false);
         navigator("/");
       }
-      // console.log("user", res);
+      // ("user", res);
       localStorage.setItem("token", res.token);
       setUser(res.data);
     } catch (error) {

@@ -49,14 +49,15 @@ const Pay = () => {
   };
   const handleSubmitInfoPay = async () => {
     getInfoPay();
-    console.log(
-      "ok",
-      location.state.idOrder,
-      product_id,
-      idUser,
-      productItem?.length,
-      location.state.totalPrice
-    );
+    if (
+      !location.state.idOrder ||
+      !product_id ||
+      !idUser ||
+      !productItem?.length ||
+      !location.state.totalPrice
+    ) {
+      return toast.error("Missing required fields");
+    }
     const res = await postOrder(
       location.state.idOrder,
       product_id,

@@ -19,7 +19,7 @@ const ProductFavourite = () => {
     const res = await getFavourite(id);
 
     if (res.code !== 200) {
-      return console.log("Error server !");
+      return "Error server !";
     }
     setFavourite(res.data);
   };

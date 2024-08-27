@@ -41,7 +41,7 @@ function ShopProfile() {
       setCategories(res.data.categories);
       setProducts(res.data.products);
     } catch (error) {
-      console.log(new Error("Error"));
+      new Error("Error");
     }
   };
 
@@ -64,6 +64,7 @@ function ShopProfile() {
             rowItem="row"
             avatarClassName="col-6 col-md-2"
             infoClassName="col-6 col-md-10"
+            LinkTo={"#/#"}
             chat={user?.id !== userShop.id ? true : false}
             hr={true}
           />

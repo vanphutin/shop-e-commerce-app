@@ -25,7 +25,6 @@ const ShopPage = () => {
     }
     setUsers(res.data);
   };
-  console.log(user);
 
   return (
     <div className="shop__list container ">
@@ -34,27 +33,18 @@ const ShopPage = () => {
           All the booths for the style you love !
         </h1>
       </div>
-      {user && user.role === "seller" && (
-        <div className="shop__list-user">
-          <ShopItem
-            infoClassName="col-10"
-            avatarClassName="col-2"
-            shopList={user}
-            hr={true}
-            rowItem="row"
-            who="you"
-            LinkTo="detail"
-            btnEdit={true}
-          />
-        </div>
-      )}
       <ul className="shop__list-items row">
         {users && users.length > 0 ? (
-          users.map((item, index) => (
-            <li className="shop__list-item col-3 mt-3" key={index}>
-              <ShopItem shopList={item} hr={false} who="" LinkTo="detail" />
-            </li>
-          ))
+          users.map((item) =>
+            item.role === "seller" ? (
+              <li
+                className="shop__list-item col-12 col-md-6 col-lg-3 mt-3"
+                key={item.id}
+              >
+                <ShopItem shopList={item} hr={false} who="" LinkTo="detail" />
+              </li>
+            ) : null
+          )
         ) : (
           <LoadingSpin size="10px" />
         )}

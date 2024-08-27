@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { postCreateUser } from "../services/apiservices";
+import { CgSpinnerTwo } from "react-icons/cg";
+import "../assets/styles/pages/__register.scss";
 
 const RegisterPage = () => {
   const navigator = useNavigate();
@@ -18,6 +20,7 @@ const RegisterPage = () => {
   const [UserPassword, setPassword] = useState("");
   const [UserEmail, setEmail] = useState("");
   const [Role, setRole] = useState("customer");
+  const [loading, setLoading] = useState(false);
 
   const [show, setShow] = useState(false);
 
@@ -75,20 +78,10 @@ const RegisterPage = () => {
   });
   const handleSubmitForm = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
-    // Apply border styles based on input value
-    document.querySelectorAll("input").forEach((item) => {
-      if (item.value.trim() === "") {
-        item.style.border = "1px solid red";
-      } else if (item.value.length > 1) {
-        item.style.border = "1px solid black";
-      } else {
-        item.style.border = "";
-      }
-    });
-
-    // Check for missing required fields
-    if (
+    // Validate fields
+    const hasEmptyFields =
       !UserFirstName ||
       !UserLastName ||
       !UserCity ||
@@ -96,18 +89,19 @@ const RegisterPage = () => {
       !Birthday ||
       !UserName ||
       !UserPassword ||
-      !UserEmail
-    ) {
+      !UserEmail;
+    if (hasEmptyFields) {
+      setLoading(false);
       return toast.error("Missing required fields");
     }
 
-    // Check password length
     if (UserPassword.length < 6) {
+      setLoading(false);
       return toast.warning("Password is too short!");
     }
 
-    // Validate birthday format
     if (!isValidDate(Birthday)) {
+      setLoading(false);
       return toast.error("Invalid birthday format | example: 2004-02-29");
     }
 
@@ -128,33 +122,29 @@ const RegisterPage = () => {
       console.log("Response Status:", res.status);
       console.log("Response Data:", res.data);
 
-      // Handle successful registration
       toast.success("Registration successful!");
       navigator("/login");
     } catch (error) {
-      // Detailed logging of the error
       console.error("Error caught in catch block:", error);
 
-      // Axios error handling
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         console.error("Error Response Data:", error.response.data);
         console.error("Error Response Status:", error.response.status);
         toast.error(
           "An error occurred: " + (error.response.data.error || error.message)
         );
       } else if (error.request) {
-        // The request was made but no response was received
         console.error("Error Request:", error.request);
         toast.error("No response received from the server.");
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.error("Error Message:", error.message);
         toast.error("An error occurred: " + error.message);
       }
+    } finally {
+      setLoading(false); // Ensure loading state is set to false in the end
     }
   };
+  console.log("loading", loading);
 
   return (
     <section className="h-100 bg-dark">
@@ -390,13 +380,29 @@ const RegisterPage = () => {
                         >
                           Reset all
                         </button>
+
                         <button
-                          type="submit"
                           data-mdb-button-init
                           data-mdb-ripple-init
-                          className="btn btn-warning btn-lg ms-2"
+                          className={
+                            "btn btn-warning btn-block btn-lg ms-2" +
+                            `${loading ? " allowed" : ""} `
+                          }
+                          type="submit"
+                          disabled={loading}
                         >
-                          Submit form
+                          {loading ? (
+                            <>
+                              {" "}
+                              <CgSpinnerTwo className="loader-icon" />
+                              <span className="font-weight-light">
+                                {" "}
+                                Please wait...
+                              </span>
+                            </>
+                          ) : (
+                            <span> Submit form</span>
+                          )}
                         </button>
                       </div>
                     </div>

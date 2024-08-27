@@ -9,7 +9,7 @@ const CreateCategoryModal = ({ show, handleClose, onCategoryCreated }) => {
   const handleCreateCategory = async () => {
     try {
       const res = await createCategory({ CategoryName: categoryName });
-      // console.log("Response:");
+      // ("Response:");
 
       if (res.data.code === 201) {
         toast.success("Category created successfully.");
