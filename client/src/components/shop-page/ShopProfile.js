@@ -6,12 +6,13 @@ import { AuthContext } from "../../context/AuthProvider";
 import "../../assets/styles/components/shop/__shopProfile.scss";
 import { getShopInfo } from "../../services/apiSererviceShop";
 import ProductCard from "../products/product-card/ProductCard";
+import LoadingSpin from "../common/LoadingSpin";
 
 function ShopProfile() {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [userShop, setUserShop] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoriesUrl, setCategoriesUrl] = useState([]);
@@ -24,8 +25,10 @@ function ShopProfile() {
   const fetchUser = async (id) => {
     const res = await getUser(id);
     if (res.code !== 200) {
+      setLoading(true);
       return <p>Error, reload app please !</p>;
     }
+    setLoading(false);
     setUserShop(res.data);
   };
 
@@ -49,17 +52,22 @@ function ShopProfile() {
   const handleResetCategories = () => {
     setCategoriesUrl();
   };
+
   return (
     <div className="shop__profile container">
       <div className="shop__profile-main">
-        <ShopItem
-          shopList={userShop}
-          rowItem="row"
-          avatarClassName="col-2"
-          infoClassName="col-10"
-          chat={user?.id !== userShop.id ? true : false}
-          hr={true}
-        />
+        {loading ? (
+          <LoadingSpin />
+        ) : (
+          <ShopItem
+            shopList={userShop}
+            rowItem="row"
+            avatarClassName="col-6 col-md-2"
+            infoClassName="col-6 col-md-10"
+            chat={user?.id !== userShop.id ? true : false}
+            hr={true}
+          />
+        )}
       </div>
       <div className="shop__profile-body">
         <div className="shop__profile-body-title title-info-categories">
