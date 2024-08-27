@@ -3,6 +3,9 @@ import ShopItem from "../components/shop-page/ShopItem";
 import "../assets/styles/components/shop/__ShopCart.scss";
 import { AuthContext } from "../context/AuthProvider";
 import { getAllUsers } from "../services/apiservices";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import LoadingSpin from "../components/common/LoadingSpin";
 
 const ShopPage = () => {
   const { user } = useContext(AuthContext);
@@ -22,6 +25,7 @@ const ShopPage = () => {
     }
     setUsers(res.data);
   };
+  console.log(user);
 
   return (
     <div className="shop__list container ">
@@ -45,13 +49,15 @@ const ShopPage = () => {
         </div>
       )}
       <ul className="shop__list-items row">
-        {users && users.length > 0
-          ? users.map((item, index) => (
-              <li className="shop__list-item col-3 mt-3" key={index}>
-                <ShopItem shopList={item} hr={false} who="" LinkTo="detail" />
-              </li>
-            ))
-          : "No Data"}
+        {users && users.length > 0 ? (
+          users.map((item, index) => (
+            <li className="shop__list-item col-3 mt-3" key={index}>
+              <ShopItem shopList={item} hr={false} who="" LinkTo="detail" />
+            </li>
+          ))
+        ) : (
+          <LoadingSpin size="10px" />
+        )}
       </ul>
     </div>
   );
