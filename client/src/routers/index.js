@@ -21,6 +21,7 @@ import ShopPage from "../pages/ShopPage";
 import ShopProfile from "../components/shop-page/ShopProfile";
 import CheckOutPage from "../pages/CheckOutPage";
 import ProfilePage from "../pages/ProfilePage";
+import AboutPage from "../pages/AboutPage";
 
 const AuthLayout = () => {
   return (
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
         path: "/login",
         element: <LoginPage />,
       },
+
       {
         path: "/sign-up",
         element: <RegisterPage />,
@@ -102,6 +104,10 @@ const router = createBrowserRouter([
           {
             path: "/cart",
             element: <ProductCart />,
+          },
+          {
+            path: "/about",
+            element: <AboutPage />,
           },
           {
             path: "/favourited",

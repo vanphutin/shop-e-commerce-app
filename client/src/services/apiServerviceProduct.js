@@ -1,8 +1,7 @@
 import axios from "../utils/AxiosCustom";
 
-const getAllProducts = (sort, categories) => {
+const getAllProducts = (sort, categories, role) => {
   let url = "/product?";
-
   if (sort) {
     url += `sort=${sort}&`;
   }
@@ -11,20 +10,11 @@ const getAllProducts = (sort, categories) => {
     url += `categories=${categories.join(",")}&`;
   }
 
-  // Xóa '&' cuối nếu cần thiết
+  // Remove trailing '&' if necessary
   url = url.endsWith("&") ? url.slice(0, -1) : url;
 
-  return axios.get(url);
-  // try {
-  //   const response = await axios.get(url);
-  //   return response; // Trả về dữ liệu từ phản hồi
-  // } catch (error) {
-  //   console.error(
-  //     "Error fetching products:",
-  //     error.response ? error.response.data : error.message
-  //   );
-  //   throw error; // Ném lỗi để người gọi xử lý
-  // }
+  // Add role to the request headers
+  return axios.get(url, { headers: { role: role } });
 };
 
 const postCreateProduct = async (

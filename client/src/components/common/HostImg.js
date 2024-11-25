@@ -1,3 +1,3 @@
-const HOST_IMG = "https://shop-e-commerce-app.onrender.com";
+const HOST_IMG = "http://localhost:8081";
 
 export default HOST_IMG;

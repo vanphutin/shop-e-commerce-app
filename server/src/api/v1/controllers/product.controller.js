@@ -9,27 +9,41 @@ module.exports.getAllProducts = async (req, res) => {
   const sort = req.query.sort;
   const page = req.query.page;
   const categoriesQuery = req.query.categories;
-  // Kiểm tra nếu categoriesQuery là chuỗi
+  const role = req.headers.role || req.query.role || ""; // Adjust based on where role is sent
+
+  // Check if categoriesQuery is a string
   const categories =
     typeof categoriesQuery === "string" ? categoriesQuery.split(",") : [];
 
   try {
     const allProducts = await Products.getAllProducts(sort, categories, page);
-
+    // console.log("allProducts", allProducts);
     if (allProducts.length === 0) {
-      return res.json({
+      return res.status(404).json({
         code: 404,
         message: "No products found",
       });
     }
-    const newProducts = allProducts.filter((product) => product.Deleted === 0);
+
+    // Filter products based on role
+    const newProducts = role
+      ? allProducts.filter((product) => {
+          if (role == "administrator") {
+            return product.Deleted === 0 && product.status === 0;
+          } else {
+            return product.Deleted === 0 && product.status === 1;
+          }
+        })
+      : allProducts;
+    // console.log("allProducts", allProducts);
+
     res.status(200).json({
       code: 200,
       message: "Get all products successful",
       data: newProducts,
     });
   } catch (error) {
-    "Error executing query:", error;
+    console.error("Error executing query:", error);
     res.status(500).json({
       code: 500,
       message: "Internal server error",

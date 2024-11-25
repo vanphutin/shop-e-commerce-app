@@ -9,6 +9,7 @@ const Products = {
       SELECT p.*, c.CategoryName
       FROM products p
       JOIN productcategories c ON p.ProductCategoryID = c.CategoryID
+     
     `;
 
     // Handle Category filtering
@@ -38,6 +39,7 @@ const Products = {
 
     try {
       const result = await query(sql_product, params);
+
       return result;
     } catch (error) {
       console.error("Error executing query:", error);

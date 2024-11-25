@@ -134,7 +134,8 @@ const HeaderPage = () => {
                     className="dropdown-menu text-small  "
                     style={{ right: "0" }}
                   >
-                    {user?.role === "seller" ? (
+                    {user?.role === "seller" ||
+                    user?.role === "administrator" ? (
                       <li>
                         <Link to="/admin" className="dropdown-item">
                           Admin

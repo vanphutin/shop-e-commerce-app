@@ -11,8 +11,8 @@ import Stack from "@mui/material/Stack";
 const ProductItems = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // To handle loading state
-  const [error, setError] = useState(null); // To handle error state
   const location = useLocation();
+  const [error, setError] = useState(null); // To handle error state
   const { search } = location.state || {}; // Lấy state hoặc giá trị mặc định là {}
   const { productSearch } = location.state || {}; // Lấy state hoặc giá trị mặc định là {}
 
@@ -69,6 +69,7 @@ const ProductItems = () => {
       </p>
     ); // Loading state
   if (error) return <p>{error}</p>; // Error state
+  console.log("productSearch", products);
 
   return (
     <div className="product-items">
