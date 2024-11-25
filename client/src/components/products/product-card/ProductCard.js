@@ -112,7 +112,6 @@ const ProductCard = ({
         item.classList.toggle("isActive");
       }
     });
-    console.log("list", listHeart);
   };
 
   return (
@@ -121,7 +120,7 @@ const ProductCard = ({
         <div className={`card-product__image ${imageclassName}`}>
           <Link to={`${Linkto}/${ProductID}`}>
             <img
-              src={`${HOST_IMG}/${ProductImage}`}
+              src={ProductImage}
               alt={ProductName}
               className="image-product"
               width={sizeImg}

@@ -51,6 +51,7 @@ module.exports.getAllProducts = async (req, res) => {
   }
 };
 
+// Hàm tạo sản phẩm
 module.exports.createProducts = async (req, res) => {
   const ProductID = uuidv4();
   try {
@@ -63,18 +64,17 @@ module.exports.createProducts = async (req, res) => {
       ProductStock,
       UserID,
     } = req.body;
-    console.log("req.body", req.body);
 
-    let ProductImageBase64;
+    let ProductImageBase64 = null;
     if (req.file) {
-      const filePath = req.file.path; // Đường dẫn file từ multer
+      const filePath = req.file.path; // Đường dẫn file tạm thời
       try {
-        // Đọc file và chuyển sang base64
+        // Chuyển file sang base64
         const fileData = await fs.readFile(filePath);
         ProductImageBase64 = `data:${
           req.file.mimetype
         };base64,${fileData.toString("base64")}`;
-        console.log("fileData", fileData);
+        await fs.unlink(filePath); // Xóa file tạm
       } catch (err) {
         return res.status(500).json({
           code: 500,
@@ -82,32 +82,34 @@ module.exports.createProducts = async (req, res) => {
         });
       }
     }
-    const productFilds = [
+
+    // Kiểm tra các trường cần thiết
+    const requiredFields = [
       "ProductName",
       "ProductPrice",
       "ProductWeight",
       "ProductLongDesc",
-      "ProductImageBase64",
       "ProductCategoryID",
       "ProductStock",
       "UserID",
     ];
-    for (let i = 0; i < productFilds.length; i++) {
-      if (!req.body[productFilds[i]]) {
-        // Check if the field is missing or undefined
+    for (const field of requiredFields) {
+      if (!req.body[field]) {
         return res.status(400).json({
           statusCode: 400,
-          message: `Missing required field: ${productFilds[i]}`,
+          message: `Missing required field: ${field}`,
         });
       }
     }
+
+    // Tạo sản phẩm
     const create = await Products.createProducts(
       ProductID,
       ProductName,
       ProductPrice,
       ProductWeight,
       ProductLongDesc,
-      ProductImageBase64, // Lưu base64 vào DB
+      ProductImageBase64, // Lưu base64
       ProductCategoryID,
       ProductStock,
       UserID
@@ -136,6 +138,7 @@ module.exports.getDetailProducts = async (req, res) => {
         message: "Product not found",
       });
     }
+
     res.status(200).json({
       code: 200,
       message: "Get product success",

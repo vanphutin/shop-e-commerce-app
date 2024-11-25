@@ -28,6 +28,20 @@ const postCreateProduct = async (
   id
 ) => {
   try {
+    // Kiểm tra dữ liệu đầu vào
+    if (
+      !ProductName ||
+      !ProductPrice ||
+      !ProductWeight ||
+      !ProductLongDesc ||
+      !ProductCategoryID ||
+      !ProductStock ||
+      !ProductImage ||
+      !id
+    ) {
+      throw new Error("Missing required fields");
+    }
+
     const formData = new FormData();
     formData.append("ProductName", ProductName);
     formData.append("ProductPrice", ProductPrice);
@@ -38,23 +52,34 @@ const postCreateProduct = async (
     formData.append("ProductImage", ProductImage);
     formData.append("UserID", id);
 
-    // Log dữ liệu để debug
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}: ${pair[1]}`);
+    // }
 
-    // Gửi dữ liệu dưới dạng FormData
     const response = await axios.post("/product/create", formData, {
       headers: {
-        "Content-Type": "multipart/form-data", // Cài đặt Content-Type cho FormData
+        "Content-Type": "multipart/form-data",
       },
     });
-    console.log("response", response);
-    return response; // Trả về đối tượng Axios responses
+
+    // Kiểm tra phản hồi
+    // if (response.status === 201) {
+    //   console.log("Product created successfully", response.data);
+    // } else {
+    //   console.warn("Unexpected response:", response.status, response.data);
+    // }
+
+    return response; // Trả về đối tượng Axios response
   } catch (error) {
-    console.error("Error posting user:", error); // In lỗi ra console
-    // Ném lỗi để người gọi xử lý
-    throw error;
+    if (error.response) {
+      console.error(
+        `Error posting product (HTTP ${error.response.status}):`,
+        error.response.data
+      );
+    } else {
+      console.error("Error posting product:", error.message);
+    }
+    throw error; // Ném lỗi để xử lý tiếp
   }
 };
 

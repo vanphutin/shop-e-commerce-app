@@ -12,7 +12,7 @@ app.use(cookieParser());
 
 // CORS configuration
 const whitelist = [
-  "https://vpt-quiz-app.netlify.app",
+  "https://vpt-e-commerce.netlify.app/",
   "https://vpt-e-commerce-app-9413c5e93166.herokuapp.com",
   "http://localhost:3000",
 ];

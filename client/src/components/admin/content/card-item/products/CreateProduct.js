@@ -60,7 +60,7 @@ const CreateProduct = ({ show, handleClose }) => {
         ProductImage,
         user?.id
       );
-      // ("res", res);
+      // console.log("res", res);
       if (res.code === 201) {
         toast.success("Product created successfully!");
         handleClose();

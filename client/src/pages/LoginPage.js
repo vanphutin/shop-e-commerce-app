@@ -55,6 +55,8 @@ const LoginPage = () => {
         console.error("Error Message:", error.message);
         toast.error("An error occurred: " + error.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
