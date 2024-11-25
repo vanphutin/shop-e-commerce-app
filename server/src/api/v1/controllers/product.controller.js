@@ -1,7 +1,7 @@
 const Products = require("../model/product.model");
 const db = require("../../../config/database.config");
 const { v4: uuidv4 } = require("uuid");
-const fs = require("fs");
+const fs = require("fs").promises;
 const { promisify } = require("util");
 const query = promisify(db.query).bind(db);
 
@@ -63,35 +63,51 @@ module.exports.createProducts = async (req, res) => {
       ProductStock,
       UserID,
     } = req.body;
+    console.log("req.body", req.body);
 
-    let ProductImage;
+    let ProductImageBase64;
     if (req.file) {
-      ProductImage = req.file.path.replace(/\\/g, "/"); // Lưu đường dẫn ảnh
+      const filePath = req.file.path; // Đường dẫn file từ multer
+      try {
+        // Đọc file và chuyển sang base64
+        const fileData = await fs.readFile(filePath);
+        ProductImageBase64 = `data:${
+          req.file.mimetype
+        };base64,${fileData.toString("base64")}`;
+        console.log("fileData", fileData);
+      } catch (err) {
+        return res.status(500).json({
+          code: 500,
+          message: "Error reading file",
+        });
+      }
     }
-
-    if (
-      !ProductName ||
-      !ProductPrice ||
-      !ProductWeight ||
-      !ProductLongDesc ||
-      !ProductImage ||
-      !ProductCategoryID ||
-      !ProductStock ||
-      !UserID
-    ) {
-      return res.status(404).json({
-        code: 404,
-        message: "Missing required fields",
-      });
+    const productFilds = [
+      "ProductName",
+      "ProductPrice",
+      "ProductWeight",
+      "ProductLongDesc",
+      "ProductImageBase64",
+      "ProductCategoryID",
+      "ProductStock",
+      "UserID",
+    ];
+    for (let i = 0; i < productFilds.length; i++) {
+      if (!req.body[productFilds[i]]) {
+        // Check if the field is missing or undefined
+        return res.status(400).json({
+          statusCode: 400,
+          message: `Missing required field: ${productFilds[i]}`,
+        });
+      }
     }
-
     const create = await Products.createProducts(
       ProductID,
       ProductName,
       ProductPrice,
       ProductWeight,
       ProductLongDesc,
-      ProductImage, // Lưu đường dẫn ảnh vào DB
+      ProductImageBase64, // Lưu base64 vào DB
       ProductCategoryID,
       ProductStock,
       UserID
@@ -103,7 +119,7 @@ module.exports.createProducts = async (req, res) => {
       data: create,
     });
   } catch (error) {
-    "Error executing query:", error;
+    console.error("Error executing query:", error);
     res.status(500).json({
       code: 500,
       message: "Internal server error",
