@@ -1,7 +1,7 @@
 import axios from "axios";
 const instance = axios.create({
-  // baseURL: "https://shop-e-commerce-app.onrender.com/api/v1",
-  baseURL: "http://localhost:8081/api/v1/",
+  baseURL: "https://shop-e-commerce-app.onrender.com/api/v1",
+  // baseURL: "http://localhost:8081/api/v1/",
   //   timeout: 1000,
   //   headers: { "X-Custom-Header": "foobar" },
 });
