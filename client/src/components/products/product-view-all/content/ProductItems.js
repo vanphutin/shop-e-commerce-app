@@ -69,7 +69,6 @@ const ProductItems = () => {
       </p>
     ); // Loading state
   if (error) return <p>{error}</p>; // Error state
-  console.log("productSearch", products);
 
   return (
     <div className="product-items">

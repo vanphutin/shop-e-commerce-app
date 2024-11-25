@@ -14,7 +14,7 @@ const Products = {
 
     // Handle Category filtering
     if (categories.length > 0) {
-      sql_product += ` WHERE c.CategoryName IN (${categories
+      sql_product += ` WHERE p.Deleted=0 AND c.CategoryName IN (${categories
         .map(() => "?")
         .join(",")})`;
     }
