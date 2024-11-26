@@ -22,6 +22,8 @@ import ShopProfile from "../components/shop-page/ShopProfile";
 import CheckOutPage from "../pages/CheckOutPage";
 import ProfilePage from "../pages/ProfilePage";
 import AboutPage from "../pages/AboutPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import PrivateRouter from "./PrivateRouter";
 
 const AuthLayout = () => {
   return (
@@ -42,6 +44,10 @@ const AuthLayout = () => {
       <Outlet />
     </>
   );
+};
+
+const ProtectedRoute = ({ children, role }) => {
+  return PrivateRouter(role) ? children : <NotFoundPage />;
 };
 
 const router = createBrowserRouter([
@@ -71,7 +77,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <SidebarLayout />,
+        element: (
+          <ProtectedRoute role={["seller", "administrator"]}>
+            <SidebarLayout />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "",
@@ -84,6 +94,10 @@ const router = createBrowserRouter([
           {
             path: "product",
             element: <Products />,
+          },
+          {
+            element: <NotFoundPage />,
+            path: "*",
           },
           // Bạn có thể thêm các route con khác tại đây
         ],
@@ -128,6 +142,10 @@ const router = createBrowserRouter([
           {
             path: "/profile",
             element: <ProfilePage />,
+          },
+          {
+            element: <NotFoundPage />,
+            path: "*",
           },
         ],
       },

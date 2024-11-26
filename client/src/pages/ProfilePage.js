@@ -13,13 +13,13 @@ const ProfilePage = () => {
     setShow(true);
   };
   return (
-    <div className="profile container">
+    <div className="profile container mt-3">
       <div className="profile__header">
-        <div className="profile__header-logo">
+        <div className="profile__header-logo rounded-circle">
           <img
-            src={`${HOST_IMG}/${user?.avatar}`}
+            src={`${user?.avatar}`}
             alt={user?.firstname}
-            className="logo"
+            className="logo rounded-circle"
             height="100"
             width="100"
           />

@@ -80,7 +80,7 @@ const ProductCart = () => {
               >
                 <div className="cart__item-image col-2">
                   <img
-                    src={`${HOST_IMG}/${item.ProductImage}`}
+                    src={`${item.ProductImage}`}
                     alt={item.name}
                     className="img-fluid"
                   />

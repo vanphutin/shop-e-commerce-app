@@ -9,7 +9,6 @@ import { AuthContext } from "../../../context/AuthProvider";
 import { getDetailCategories } from "../../../services/apiServerviceCategorie";
 import { postAddCart } from "../../../services/apiServerviceCart";
 import { v4 as uuidv4 } from "uuid";
-import HOST_IMG from "../../common/HostImg";
 import { Box, CircularProgress } from "@mui/material";
 
 const ProductDetail = () => {
@@ -29,10 +28,7 @@ const ProductDetail = () => {
   //Call APIs
   useEffect(() => {
     fetchProductDetail(id);
-    if (product?.ProductCategoryID) {
-      fetchCategory(product.ProductCategoryID);
-    }
-  }, [product?.ProductCategoryID]);
+  }, []);
 
   // API get detail product
   const fetchProductDetail = async (id) => {
@@ -109,7 +105,7 @@ const ProductDetail = () => {
           <div className="detail-page-main main-address  col-12 col-sm-12 col-lg-6 col-xl-4">
             <div className="main-address__image">
               <img
-                src={`${HOST_IMG}/${product.ProductImage} `}
+                src={`${product.ProductImage} `}
                 alt={product.ProductName}
                 className="image"
               />
@@ -135,10 +131,6 @@ const ProductDetail = () => {
             </div>
           </div>
           <div className="detail-page-main main-info  col-12 col-sm-12 col-lg-6 col-xl-4 ">
-            <div className="main-info__category">
-              {" "}
-              {category || product.ProductCategoryID}
-            </div>
             <div className="main-info__name">
               <h1>{product.ProductName}</h1>{" "}
             </div>

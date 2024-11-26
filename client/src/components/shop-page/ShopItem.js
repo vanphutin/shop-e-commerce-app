@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
-import HOST_IMG from "../common/HostImg";
 
 const ShopItem = ({
   shopList,
@@ -23,9 +22,9 @@ const ShopItem = ({
         <div className={`shop__item-avata ${avatarClassName}`}>
           <Link to={`${LinkTo}/${id}`}>
             <img
-              src={`${HOST_IMG}/${avatar}`}
+              src={`${avatar}`}
               alt={`${firstname} ${lastname}`}
-              className="avata-user"
+              className="avata-user rounded-circle"
               width="150px"
               height="150px"
             />

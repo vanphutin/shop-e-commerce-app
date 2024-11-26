@@ -103,7 +103,6 @@ const TableProduct = () => {
       // Check role and call getAllProducts accordingly
       if (user?.role === "administrator" || user?.role === "seller") {
         res = await getAllProducts(sort, categories, user.role);
-        console.log("res", res);
       } else {
         res = await getAllProducts(sort, categories);
       }

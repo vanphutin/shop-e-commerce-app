@@ -7,19 +7,19 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
     <CDBSidebar textColor="#fff" backgroundColor="#333">
       <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-        <a
-          href="/"
+        <Link
+          to="/"
           className="text-decoration-none"
           style={{ color: "inherit" }}
         >
-          VANPHUTIN
-        </a>
+          <p>VANPHUTIN</p>
+        </Link>
       </CDBSidebarHeader>
 
       <CDBSidebarContent className="sidebar-content">

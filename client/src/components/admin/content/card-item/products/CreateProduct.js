@@ -8,20 +8,26 @@ import { postCreateProduct } from "../../../../../services/apiServerviceProduct"
 import { AuthContext } from "../../../../../context/AuthProvider";
 
 const CreateProduct = ({ show, handleClose }) => {
+  //random pirce
+  let priceRandom = Math.random() * 1000;
+  //random weight
+  let priceWeight = Math.round(Math.random() * 10);
+  //random stock
+  let priceStock = Math.round(Math.random() * 1000);
+
   const { user } = useContext(AuthContext);
 
   const [categories, setCategories] = useState([]);
   const [ProductCategoryID, setProductCategoryID] = useState("");
 
   const [ProductName, setProductName] = useState("");
-  const [ProductPrice, setProductPrice] = useState(0);
-  const [ProductWeight, setProductWeight] = useState(0);
+  const [ProductPrice, setProductPrice] = useState(priceRandom.toFixed(3));
+  const [ProductStock, setProductStock] = useState(priceStock);
+  const [ProductWeight, setProductWeight] = useState(priceWeight);
   const [ProductLongDesc, setProductLongDesc] = useState("");
-  const [ProductStock, setProductStock] = useState(0);
   const [ProductImage, setProductImage] = useState(null);
 
   const [file, setFile] = useState();
-
   useEffect(() => {
     fetchCategories();
   }, []);

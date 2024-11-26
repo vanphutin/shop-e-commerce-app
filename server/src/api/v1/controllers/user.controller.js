@@ -165,11 +165,20 @@ module.exports.getUser = async (req, res) => {
 };
 
 module.exports.updateUsers = async (req, res) => {
-  const { firstname, lastname, city, country, gender, userID } = req.body; // Fixed typo 'coutry' to 'country'
+  const { firstname, lastname, city, country, gender, userID } = req.body;
   let avatar = null;
 
   if (req.file) {
-    avatar = req.file.path.replace(/\\/g, "/"); // Normalize the file path
+    try {
+      // Chuyển file từ buffer sang Base64
+      const fileData = req.file.buffer.toString("base64");
+      avatar = `data:${req.file.mimetype};base64,${fileData}`;
+    } catch (err) {
+      return res.status(500).json({
+        code: 500,
+        message: "Error processing file",
+      });
+    }
   }
 
   const missingFields = [];
@@ -195,7 +204,7 @@ module.exports.updateUsers = async (req, res) => {
       lastname,
       avatar,
       city,
-      country, // Fixed typo 'coutry' to 'country'
+      country,
       gender
     );
     if (!update) {
@@ -209,7 +218,7 @@ module.exports.updateUsers = async (req, res) => {
       message: "Update user successful",
     });
   } catch (error) {
-    "Error executing query:", error;
+    console.error("Error executing query:", error);
     res.status(500).json({
       code: 500,
       message: "Internal server error",
