@@ -145,6 +145,11 @@ const HeaderPage = () => {
                       ""
                     )}
                     <li>
+                      <Link to="/profile" className="dropdown-item">
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
                       <a className="dropdown-item" href="#">
                         Settings
                       </a>
@@ -154,11 +159,7 @@ const HeaderPage = () => {
                         Wallet
                       </a>
                     </li>
-                    <li>
-                      <Link to="/profile" className="dropdown-item">
-                        Profile
-                      </Link>
-                    </li>
+
                     <li>
                       <hr className="dropdown-divider" />
                     </li>

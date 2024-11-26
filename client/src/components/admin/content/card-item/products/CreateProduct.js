@@ -9,7 +9,7 @@ import { AuthContext } from "../../../../../context/AuthProvider";
 
 const CreateProduct = ({ show, handleClose }) => {
   //random pirce
-  let priceRandom = Math.random() * 1000;
+  let priceRandom = (Math.random() * 600).toFixed(3);
   //random weight
   let priceWeight = Math.round(Math.random() * 10);
   //random stock
@@ -21,13 +21,14 @@ const CreateProduct = ({ show, handleClose }) => {
   const [ProductCategoryID, setProductCategoryID] = useState("");
 
   const [ProductName, setProductName] = useState("");
-  const [ProductPrice, setProductPrice] = useState(priceRandom.toFixed(3));
+  const [ProductPrice, setProductPrice] = useState(priceRandom);
   const [ProductStock, setProductStock] = useState(priceStock);
   const [ProductWeight, setProductWeight] = useState(priceWeight);
   const [ProductLongDesc, setProductLongDesc] = useState("");
   const [ProductImage, setProductImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [file, setFile] = useState();
+  const [file, setFile] = useState("");
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -52,7 +53,9 @@ const CreateProduct = ({ show, handleClose }) => {
 
   const handleSubmitCreateProduct = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (ProductCategoryID.length <= 0) {
+      setLoading(false);
       return toast.info("Please choose category !");
     }
     try {
@@ -70,12 +73,24 @@ const CreateProduct = ({ show, handleClose }) => {
       if (res.code === 201) {
         toast.success("Product created successfully!");
         handleClose();
+        setLoading(false);
+        setProductLongDesc("");
+        setProductName("");
+        setProductPrice(priceRandom);
+        setProductWeight(priceWeight);
+        setProductStock(priceStock);
+        setProductImage(null);
+        setFile("");
       } else {
+        setLoading(false);
+
         toast.error(res.data.message);
       }
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error("Failed to create product.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -287,7 +302,11 @@ const CreateProduct = ({ show, handleClose }) => {
                             <Button variant="secondary" onClick={handleClose}>
                               Close
                             </Button>
-                            <Button variant="primary" type="submit">
+                            <Button
+                              variant="primary"
+                              type="submit"
+                              disabled={loading}
+                            >
                               Confirm
                             </Button>
                           </Modal.Footer>

@@ -17,7 +17,7 @@ module.exports.getAllProducts = async (req, res) => {
 
   try {
     const allProducts = await Products.getAllProducts(sort, categories, page);
-    // console.log("allProducts", allProducts);
+
     if (allProducts.length === 0) {
       return res.status(404).json({
         code: 404,
@@ -26,21 +26,23 @@ module.exports.getAllProducts = async (req, res) => {
     }
 
     // Filter products based on role
-    const newProducts = role
+    const filteredProducts = role
       ? allProducts.filter((product) => {
-          if (role == "administrator") {
+          if (role === "administrator") {
             return product.Deleted === 0 && product.status === 0;
           } else {
             return product.Deleted === 0 && product.status === 1;
           }
         })
       : allProducts;
-    // console.log("allProducts", allProducts);
+
+    // Shuffle products randomly
+    const randomProducts = filteredProducts.sort(() => Math.random() - 0.5);
 
     res.status(200).json({
       code: 200,
       message: "Get all products successful",
-      data: newProducts,
+      data: randomProducts,
     });
   } catch (error) {
     console.error("Error executing query:", error);

@@ -74,6 +74,7 @@ const RegisterSeller = () => {
         UserAvatar,
         Role
       );
+      console.log("res", res);
 
       // Handle successful registration
       toast.success("Registration successful!");
@@ -261,7 +262,7 @@ const RegisterSeller = () => {
                           id="form3Example99"
                           className="form-control form-control-lg"
                           accept="image/*"
-                          name="avatar"
+                          name="UserAvatar"
                           onChange={handleImageChange}
                         />
                         <img src={file} alt="" style={{ width: "200px" }} />
